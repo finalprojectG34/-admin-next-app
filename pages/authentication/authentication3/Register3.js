@@ -14,7 +14,7 @@ import AuthRegister from '../auth-forms/AuthRegister';
 
 // ===============================|| AUTH3 - REGISTER ||=============================== //
 
-const Register = () => {
+const RegisterPage = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -87,4 +87,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default RegisterPage;

@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {useSelector} from 'react-redux';
-
+import { useRouter } from 'next/router'
 // material-ui
 import {useTheme} from '@mui/material/styles';
 import {
@@ -26,20 +26,21 @@ import * as Yup from 'yup';
 import {Formik} from 'formik';
 
 // project imports
-import useScriptRef from 'hooks/useScriptRef';
-import AnimateButton from 'pages/ui-component/extended/AnimateButton';
 
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import Google from 'assets/images/icons/social-google.svg';
-import useLocalStorage from '../../../../hooks/useLocalStorage';
-import {Navigate} from 'react-router';
+import useScriptRef from "../../../hooks/useScriptRef";
+import useLocalStorage from "../../../hooks/useLocalStorage";
+import AnimateButton from "../../ui-component/extended/AnimateButton";
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const FirebaseLogin = ({...others}) => {
+    const router = useRouter()
+
     const theme = useTheme();
     const scriptedRef = useScriptRef();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
@@ -84,9 +85,11 @@ const FirebaseLogin = ({...others}) => {
 
     if (sessionToken && rolesData) {
         if (rolesData.token.indexOf('ADMIN') === -1) {
-            return <Navigate to='/access-denied'/>;
+            router.push('/access-denied')
+            return <></>;
         }
-        return <Navigate to='/'/>;
+        router.push('/')
+        return <></>;
     } else {
         return (
             <>
