@@ -147,7 +147,9 @@ export default function NavigationDrawer(props) {
                     ))}
                 </List>
                 <Divider/>
-                <h3>Shops</h3>
+                <Box style={{marginLeft: "15px", marginRight: "10px"}}>
+                    <h3>Shops</h3>
+                </Box>
                 <List>
                     {[
                         {
@@ -174,10 +176,42 @@ export default function NavigationDrawer(props) {
                         </Link>
                     ))}
                 </List>
+                <Divider/>
+                <Box style={{marginLeft: "15px", marginRight: "10px"}}>
+                    <h3>Category</h3>
+                </Box>
+                <List>
+                    {[
+                        {
+                            text: 'Create Category',
+                            link: '/category/create-category'
+                        },
+                        {
+                            text: 'Category List',
+                            link: '/category/category-list'
+                        },
+                        {
+                            text: 'Category Search',
+                            link: '/category/search-category'
+                        }].map((options, index) => (
+                        <Link href={options.link} key={index}>
+                            <ListItem key={options.text} disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
+                                    </ListItemIcon>
+                                    <ListItemText primary={options.text}/>
+                                </ListItemButton>
+                            </ListItem>
+                        </Link>
+                    ))}
+                </List>
             </Drawer>
             <Main open={open}>
                 <DrawerHeader/>
-                {props.children}
+                <Box style={{padding: "30px"}}>
+                    {props.children}
+                </Box>
             </Main>
         </Box>
     );

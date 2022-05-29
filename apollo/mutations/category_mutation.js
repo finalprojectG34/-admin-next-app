@@ -1,17 +1,12 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_CATEGORY = gql`
-  mutation ($input: CategoryInput!) {
+  mutation Mutation($input: CategoryInput!) {
     createCategory(input: $input) {
       id
-      description
-      facets
-      image
       name
-      parentId
-      parentsPath
       path
-      slug
+      description
     }
   }
 `;

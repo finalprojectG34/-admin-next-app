@@ -1,12 +1,12 @@
+import CompanyCreate from "./create-shop";
 import NavigationDrawer from "../../ui-component/navigation";
-import CategoryList from "./category-list";
 
-const CategoryListPage = () => {
+const CompanyCreatePage = () => {
     return (
         <NavigationDrawer>
-            <CategoryList/>
+            <CompanyCreate/>
         </NavigationDrawer>
     );
 };
 
-export default CategoryListPage;
+export default CompanyCreatePage;

@@ -6,7 +6,6 @@ export const GET_ALL_CATEGORIES = gql`
       id
       description
       facets
-      image
       name
       parentId
       parentsPath
@@ -17,17 +16,11 @@ export const GET_ALL_CATEGORIES = gql`
 `;
 
 export const GET_ONE_CATEGORY = gql`
-  query ($getOneCategoryId: String!) {
+  query Query($getOneCategoryId: String!) {
     getOneCategory(id: $getOneCategoryId) {
       id
-      description
-      facets
-      image
       name
-      parentId
-      parentsPath
-      path
-      slug
+      description
     }
   }
 `;
