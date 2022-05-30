@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import "firebase/auth";
+import {getAuth, signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL  } from "firebase/storage";
 
 const firebaseConfig = {
@@ -14,5 +14,7 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
+const auth = getAuth();
+auth.languageCode = 'it';
 const storageRef = ref(storage, 'some-child');
-export default {app, storageRef, uploadBytes, getDownloadURL};
+export default {app, storageRef, uploadBytes, getDownloadURL, auth, signInWithPhoneNumber, RecaptchaVerifier};

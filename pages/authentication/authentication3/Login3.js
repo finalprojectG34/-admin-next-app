@@ -1,4 +1,3 @@
-
 // material-ui
 import {useTheme} from '@mui/material/styles';
 import {Divider, Grid, Stack, Typography, useMediaQuery} from '@mui/material';
@@ -7,7 +6,6 @@ import {Divider, Grid, Stack, Typography, useMediaQuery} from '@mui/material';
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
 import AuthLogin from '../auth-forms/AuthLogin';
-import Logo from "../../ui-component/Logo";
 import Link from "next/link";
 
 // assets
@@ -19,7 +17,7 @@ const LoginPage = () => {
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
     return (
-        <AuthWrapper1>
+        <AuthWrapper1 theme={theme}>
             <Grid container direction='column' justifyContent='flex-end' sx={{minHeight: '100vh'}}>
                 <Grid item xs={12}>
                     <Grid container justifyContent='center' alignItems='center'
@@ -27,11 +25,11 @@ const LoginPage = () => {
                         <Grid item sx={{m: {xs: 1, sm: 3}, mb: 0}}>
                             <AuthCardWrapper>
                                 <Grid container spacing={2} alignItems='center' justifyContent='center'>
-                                    <Grid item sx={{mb: 3}}>
-                                        <Link href="">
-                                            <Logo/>
-                                        </Link>
-                                    </Grid>
+                                    {/*<Grid item sx={{mb: 3}}>*/}
+                                    {/*    <Link href="">*/}
+                                    {/*        <Logo/>*/}
+                                    {/*    </Link>*/}
+                                    {/*</Grid>*/}
                                     <Grid item xs={12}>
                                         <Grid
                                             container
@@ -67,14 +65,13 @@ const LoginPage = () => {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Grid item container direction='column' alignItems='center' xs={12}>
-                                            {/*<Typography*/}
-                                            {/*    component={Link}*/}
-                                            {/*    to='/register'*/}
-                                            {/*    variant='subtitle1'*/}
-                                            {/*    sx={{textDecoration: 'none'}}*/}
-                                            {/*>*/}
-                                            {/*    Don&apos;t have an account?*/}
-                                            {/*</Typography>*/}
+                                            <Typography
+                                                component="div"
+                                                variant='subtitle1'
+                                                sx={{textDecoration: 'none'}}
+                                            >
+                                                <Link href="/register">Don&apos;t have an account?</Link>
+                                            </Typography>
                                         </Grid>
                                     </Grid>
                                 </Grid>

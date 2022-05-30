@@ -36,3 +36,33 @@ export const DELETE_USER = gql`
     }
   }
 `;
+
+export const SIGN_UP = gql`
+  mutation Mutation($token: PhoneSignupInput) {
+    authPhoneAndRegister(token: $token) {
+      user {
+        id
+        firstName
+        lastName
+        phone
+        password
+        email
+      }
+    }
+  }
+`;
+
+export const SIGN_IN = gql`
+  mutation AuthPhoneAndRegister($token: PhoneSignupInput) {
+    authPhoneAndRegister(token: $token) {
+      user {
+        firstName
+        lastName
+        phone
+        password
+        lastName
+      }
+      token
+    }
+  }
+`;

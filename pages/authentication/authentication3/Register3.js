@@ -1,16 +1,10 @@
-import {Link} from 'react-router-dom';
-
 // material-ui
 import {useTheme} from '@mui/material/styles';
 import {Divider, Grid, Stack, Typography, useMediaQuery} from '@mui/material';
-
-// project imports
-import AuthWrapper1 from '../AuthWrapper1';
-import AuthCardWrapper from '../AuthCardWrapper';
-import Logo from 'pages/ui-component/Logo';
-import AuthRegister from '../auth-forms/AuthRegister';
-
-// assets
+import AuthWrapper1 from "../AuthWrapper1";
+import AuthCardWrapper from "../AuthCardWrapper";
+import Link from "next/link";
+import AuthRegister from "../auth-forms/AuthRegister";
 
 // ===============================|| AUTH3 - REGISTER ||=============================== //
 
@@ -20,6 +14,7 @@ const RegisterPage = () => {
 
     return (
         <AuthWrapper1>
+            <div id="RecaptchaVerifier" />
             <Grid container direction='column' justifyContent='flex-end' sx={{minHeight: '100vh'}}>
                 <Grid item xs={12}>
                     <Grid container justifyContent='center' alignItems='center'
@@ -27,11 +22,6 @@ const RegisterPage = () => {
                         <Grid item sx={{m: {xs: 1, sm: 3}, mb: 0}}>
                             <AuthCardWrapper>
                                 <Grid container spacing={2} alignItems='center' justifyContent='center'>
-                                    <Grid item sx={{mb: 3}}>
-                                        <Link to='#'>
-                                            <Logo/>
-                                        </Link>
-                                    </Grid>
                                     <Grid item xs={12}>
                                         <Grid
                                             container
@@ -68,12 +58,10 @@ const RegisterPage = () => {
                                     <Grid item xs={12}>
                                         <Grid item container direction='column' alignItems='center' xs={12}>
                                             <Typography
-                                                component={Link}
-                                                to='/login'
                                                 variant='subtitle1'
                                                 sx={{textDecoration: 'none'}}
                                             >
-                                                Already have an account?
+                                                <Link href='/login'>Already have an account?</Link>
                                             </Typography>
                                         </Grid>
                                     </Grid>

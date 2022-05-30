@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 import {ApolloProvider} from "@apollo/client";
-import {Provider, useSelector} from 'react-redux';
+import {Provider} from 'react-redux';
 
 import {client} from "../apollo/client";
 import {store} from "../store";
