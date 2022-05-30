@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 
 // material-ui
 import {Grid} from '@mui/material';
-import {gridSpacing} from '../../../store/customization/constant';
+import {gridSpacing} from '../../store/customization/constant';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
