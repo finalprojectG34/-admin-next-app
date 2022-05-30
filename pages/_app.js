@@ -1,30 +1,29 @@
-import '../styles/globals.css'
-import {ApolloProvider} from "@apollo/client";
 import {Provider} from 'react-redux';
-
-import {client} from "../apollo/client";
-import {store} from "../store";
-import themes from "../themes";
+import {ApolloProvider} from "@apollo/client";
 import {ThemeProvider} from "@mui/material";
+
+import {client} from "../src/apollo/client";
+import {store} from "../src/store";
+import themes from "../src/themes";
 import config from "../config";
 
-function MyApp({Component, pageProps}) {
-    // const customization = useSelector((state) => state.customization);
+import '../src/styles/globals.css';
 
-    return (
-        <ApolloProvider client={client}>
-            <Provider store={store}>
-                <ThemeProvider theme={themes({
-                    isOpen: [], // for active default menu
-                    fontFamily: config.fontFamily,
-                    borderRadius: config.borderRadius,
-                    opened: false
-                })}>
-                    <Component {...pageProps} />
-                </ThemeProvider>
-            </Provider>
-        </ApolloProvider>
-    )
+function MyApp({Component, pageProps}) {
+  return (
+    <ApolloProvider client={client}>
+      <Provider store={store}>
+        <ThemeProvider theme={themes({
+          isOpen: [], // for active default menu
+          fontFamily: config.fontFamily,
+          borderRadius: config.borderRadius,
+          opened: false
+        })}>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </Provider>
+    </ApolloProvider>
+  )
 }
 
 export default MyApp

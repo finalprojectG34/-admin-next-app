@@ -1,12 +1,12 @@
-import NavigationDrawer from "../../ui-component/navigation";
+import NavigationDrawer from "../../../src/ui-components/navigation";
 import CategoryList from "./category-list";
 
 const CategoryListPage = () => {
-    return (
-        <NavigationDrawer>
-            <CategoryList/>
-        </NavigationDrawer>
-    );
+  return (
+    <NavigationDrawer>
+      <CategoryList/>
+    </NavigationDrawer>
+  );
 };
 
 export default CategoryListPage;

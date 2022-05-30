@@ -1,26 +1,25 @@
 import React from 'react';
-import {useHistory} from 'react-router-dom';
-
 import {Box, Button} from '@mui/material';
+import {useRouter} from "next/router";
 
 const AccessDenied = () => {
-    const history = useHistory();
+  const router = useRouter();
 
-    return (
-        <div>
-            Access denied{' '}
-            <Box>
-                <Button
-                    variant='contained'
-                    onClick={() => {
-                        history.push('/logout');
-                    }}
-                >
-                    Logout
-                </Button>
-            </Box>
-        </div>
-    );
+  return (
+    <div>
+      Access denied{' '}
+      <Box>
+        <Button
+          variant='contained'
+          onClick={() => {
+            router.push('/logout');
+          }}
+        >
+          Logout
+        </Button>
+      </Box>
+    </div>
+  );
 };
 
 export default AccessDenied;
