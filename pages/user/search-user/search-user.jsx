@@ -1,4 +1,6 @@
-// material-ui
+import {useState} from 'react';
+import {useLazyQuery} from '@apollo/client';
+
 import {
   Alert,
   Box,
@@ -13,15 +15,12 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import {useState} from 'react';
-import {useLazyQuery} from '@apollo/client';
 
-// project imports
-import {GET_ONE_USER} from "../../../src/apollo/queries/user_queries";
 import MainCard from '../../../src/ui-components/cards/MainCard';
 import Loader from "../../../src/ui-components/Loader";
 
-// ==============================|| SAMPLE PAGE ||============================== //
+import {GET_ONE_USER} from "../../../src/apollo/queries/user_queries";
+
 
 const UserSearch = () => {
   const [getUser, {data, error, loading}] = useLazyQuery(GET_ONE_USER);
@@ -63,10 +62,11 @@ const UserSearch = () => {
             <Box sx={{display: 'flex'}}>
               <TextField
                 label={value}
-                variant='standard'
+                variant='outlined'
                 value={text}
                 onChange={e => setText(e.target.value)}
                 sx={{mr: 2}}
+                data-cy='user-id-search-input'
               />
 
               <Button
@@ -76,8 +76,9 @@ const UserSearch = () => {
                     variables: {
                       getUserByIdId: text
                     }
-                  });
+                  }).then(() => {});
                 }}
+                data-cy='user-id-search-button'
               >
                 Search
               </Button>
@@ -86,6 +87,12 @@ const UserSearch = () => {
           {data && (
             <Card sx={{maxWidth: 275, bgcolor: '#00000021'}}>
               <CardContent>
+                {data.getUserById.id && (
+                  <Typography sx={{fontSize: 18}} gutterBottom data-cy='user-id-search-result'>
+                    Id: {data.getUserById.id}
+                  </Typography>
+                )}
+
                 {data.getUserById.firstName && (
                   <Typography sx={{fontSize: 18}} gutterBottom>
                     First Name: {data.getUserById.firstName}

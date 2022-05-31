@@ -1,14 +1,19 @@
 import React, {useState} from 'react';
-// material-ui
-import {Box, FormControl, InputLabel, MenuItem, Select} from '@mui/material';
+import {useRouter} from "next/router";
 import {useMutation} from '@apollo/client';
-// project imports
-import MainCard from '../../../src/ui-components/cards/MainCard';
-import {InputField} from '../../../src/ui-components/input/InputField';
-import {CREATE_USER} from "../../../src/apollo/mutations/user_mutation";
+
+import {Box, FormControl, Grid, InputLabel, MenuItem, Select, Typography} from '@mui/material';
 import {LoadingButton} from "@mui/lab";
 
+import MainCard from '../../../src/ui-components/cards/MainCard';
+import {InputField} from '../../../src/ui-components/input/InputField';
+
+import AnimateButton from "../../../src/ui-components/extended/AnimateButton";
+import {CREATE_USER} from "../../../src/apollo/mutations/user_mutation";
+
+
 const UserCreate = () => {
+  const router = useRouter();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -20,6 +25,12 @@ const UserCreate = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(
+      {   firstName,
+      lastName,
+      phone,
+      role
+  })
     createUser({
       variables: {
         input: {
@@ -30,7 +41,7 @@ const UserCreate = () => {
         }
       }
     }).then((data) => {
-      console.log("==============>", data)
+      router.push("/user/user-list")
     });
   };
 
@@ -43,6 +54,7 @@ const UserCreate = () => {
           placeholder='First Name'
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
+          dataCy='user-firstName-input'
         />
 
         <InputField
@@ -51,6 +63,7 @@ const UserCreate = () => {
           placeholder='Last Name'
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
+          dataCy='user-lastName-input'
         />
 
         <InputField
@@ -60,6 +73,7 @@ const UserCreate = () => {
           placeholder='Image'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          dataCy='user-email-input'
         />
 
         <InputField
@@ -68,6 +82,7 @@ const UserCreate = () => {
           placeholder='Phone Number'
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
+          dataCy='user-phoneNumber-input'
         />
 
         <FormControl fullWidth margin='normal'>
@@ -78,24 +93,42 @@ const UserCreate = () => {
             value={role}
             label='Role'
             onChange={(e) => setRole(e.target.value)}
-            data-cy={'dataCy'}
+            data-cy='user-role-select'
           >
+            {/*<option value="user">USER</option>*/}
+            {/*<option value='admin'>ADMIN</option>*/}
             <MenuItem value='user'>USER</MenuItem>
             <MenuItem value='admin'>ADMIN</MenuItem>
-            <MenuItem value='seller'>SELLER</MenuItem>
-            <MenuItem value='super'>SUPER</MenuItem>
+            {/*<MenuItem value='seller'>SELLER</MenuItem>*/}
+            {/*<MenuItem value='super'>SUPER</MenuItem>*/}
           </Select>
         </FormControl>
 
-        <Box textAlign={'center'} mt={2}>
-          <LoadingButton
-            type='submit'
-            variant='contained'
-            loading={loading}
-          >
-            Create User
-          </LoadingButton>
+        <Box sx={{mt: 2}}>
+          <AnimateButton>
+            <LoadingButton
+              disableElevation
+              disabled={loading}
+              fullWidth
+              size='large'
+              type='submit'
+              variant='contained'
+              color='secondary'
+              loading={loading}
+              data-cy='user-create-button'
+            >
+              Create User
+            </LoadingButton>
+          </AnimateButton>
         </Box>
+
+        {error && (
+          <Grid xs={12} container direction="row" alignItems='center' justifyContent='center'>
+            <Typography variant='caption' fontSize='16px' textAlign="center" color="palevioletred">
+              Error Happened!
+            </Typography>
+          </Grid>
+        )}
       </form>
     </MainCard>
   );

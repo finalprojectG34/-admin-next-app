@@ -1,28 +1,20 @@
-// material-ui
-import {LoadingButton} from '@mui/lab';
-import {Box, Dialog, Typography} from '@mui/material';
-
-// project imports
-import MainCard from '../../../src/ui-components/cards/MainCard';
-import {InputField} from '../../../src/ui-components/input/InputField';
-import {useMutation} from "@apollo/client";
 import {useEffect, useState} from "react";
-import {CREATE_COMPANY} from "../../../src/apollo/mutations/shop_mutations";
-import Loader from "../../../src/ui-components/Loader";
-import {connect} from "react-redux";
-import {createBusiness} from "../../../src/store/create_business/create.utils";
+import {useMutation} from "@apollo/client";
 import Compressor from "compressorjs";
 
-// ==============================|| SAMPLE PAGE ||============================== //
+import {LoadingButton} from '@mui/lab';
+import {Box, Dialog, Grid, Typography} from '@mui/material';
 
-const CompanyCreate = (props) => {
-  const {
-    isCreating,
-    created,
-    creatingError,
-    progress,
-    url,
-  } = props;
+import MainCard from '../../../src/ui-components/cards/MainCard';
+import {InputField} from '../../../src/ui-components/input/InputField';
+import Loader from "../../../src/ui-components/Loader";
+import AnimateButton from "../../../src/ui-components/extended/AnimateButton";
+
+import {CREATE_COMPANY} from "../../../src/apollo/mutations/shop_mutations";
+import fbConfig from "../../../src/firebase/fb-config";
+
+
+const CompanyCreate = () => {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -34,20 +26,29 @@ const CompanyCreate = (props) => {
   const [filePath, setFilePath] = useState(null);
   const [picture, setPicture] = useState(null);
   const [fileSizeError, setFileSizeError] = useState(null);
+  const [url, setUrl] = useState(null);
+  const [isCreating, setIsCreating] = useState(null);
 
-  const [createCompany, {loading, data, error}] = useMutation(CREATE_COMPANY);
+  const [createCompany, {loading, error}] = useMutation(CREATE_COMPANY);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (businessName && locationLocal && phoneNumber && picture && categories) {
-    //     setCheckFields(true);
-    props.createBusiness({
-      picture,
-      businessName: "businessName",
-    });
-    // } else {
-    //     setCheckFields(false);
-    // }
+    setIsCreating(true);
+    if (picture) {
+      // setCheckFields(true);
+      fbConfig.uploadBytes(fbConfig.storageRef, picture).then((snapshot) => {
+        console.log('Uploaded a blob or file!', snapshot);
+        fbConfig.getDownloadURL(fbConfig.storageRef)
+          .then(url => setUrl(url));
+      })
+        .catch(e => {
+          setIsCreating(false);
+          console.log("error happened ====>", e)
+        });
+    } else {
+      setUrl("url")
+      // setCheckFields(false);
+    }
   };
 
   const handleFile = (e) => {
@@ -69,7 +70,7 @@ const CompanyCreate = (props) => {
   };
 
   useEffect(() => {
-    if (created) {
+    if (url) {
       createCompany({
         variables: {
           "input": {
@@ -89,21 +90,22 @@ const CompanyCreate = (props) => {
             "image": {
               "images": [url],
               "bgImage": "bgImage",
-              "imageCover": picture.name,
-              "suffix": picture.type,
+              "imageCover": picture?.name,
+              "suffix": picture?.type,
               "imagePath": url
             }
           }
         }
       }).then((data) => {
         console.log("==============>", data)
+        setIsCreating(false);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [created]);
+  }, [url]);
 
   return (
-    <MainCard title='Create Shop'>
+    <MainCard title='Create Shop' sx={{margin: 'auto'}} style={{maxWidth: 'max-content'}}>
       {isCreating && (
         <Dialog open={true}>
           <div className="vw-100 uploading">
@@ -112,94 +114,91 @@ const CompanyCreate = (props) => {
         </Dialog>
       )}
       <form onSubmit={handleSubmit}>
-        <Box sx={{margin: 'auto'}} style={{width: 'max-content'}}>
-          <InputField
-            label='Name'
-            name='name'
-            placeholder='Name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            dataCy='company-name-input'
-          />
-          <InputField
-            label='Description'
-            name='description'
-            placeholder='Description'
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            dataCy='company-description-input'
-          />
-          <InputField
-            label='City'
-            name='city'
-            placeholder='City'
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            dataCy='company-city-input'
-          />
-          <InputField
-            label='Sub-City'
-            name='sub-city'
-            placeholder='Sub-City'
-            value={subCity}
-            onChange={(e) => setSubCity(e.target.value)}
-            dataCy='company-sub-city-input'
-          />
-          <InputField
-            label='Street Name'
-            name='street-name'
-            placeholder='Street Name'
-            value={addressName}
-            onChange={(e) => setAddressName(e.target.value)}
-            dataCy='company-address-name-input'
-          />
-          <InputField
-            label='Tin Number'
-            name='tin-number'
-            placeholder='Tin Number'
-            value={tinNumber}
-            onChange={(e) => setTinNumber(e.target.value)}
-            dataCy='company-tin-number-input'
-          />
+        <InputField
+          label='Name'
+          name='name'
+          placeholder='Name'
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          dataCy='company-name-input'
+        />
+        <InputField
+          label='Description'
+          name='description'
+          placeholder='Description'
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          dataCy='company-description-input'
+        />
+        <InputField
+          label='City'
+          name='city'
+          placeholder='City'
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          dataCy='company-city-input'
+        />
+        <InputField
+          label='Sub-City'
+          name='sub-city'
+          placeholder='Sub-City'
+          value={subCity}
+          onChange={(e) => setSubCity(e.target.value)}
+          dataCy='company-sub-city-input'
+        />
+        <InputField
+          label='Street Name'
+          name='street-name'
+          placeholder='Street Name'
+          value={addressName}
+          onChange={(e) => setAddressName(e.target.value)}
+          dataCy='company-address-name-input'
+        />
+        <InputField
+          label='Tin Number'
+          name='tin-number'
+          placeholder='Tin Number'
+          value={tinNumber}
+          onChange={(e) => setTinNumber(e.target.value)}
+          dataCy='company-tin-number-input'
+        />
 
-          <div className="mb-3 mt-3">
-            <img className="w-100" src={filePath} alt=""/>
-            <Typography component="p">Upload Picture</Typography>
-            <div className="px-3">
-              <input type="file" accept=".gif,.jpg,.jpeg,.png" className="" onChange={handleFile}/>
-            </div>
+        <div className="mb-3 mt-3">
+          <img className="w-100" src={filePath} alt=""/>
+          <Typography component="p">Upload Picture</Typography>
+          <div className="px-3">
+            <input type="file" accept=".gif,.jpg,.jpeg,.png" className="" onChange={handleFile}/>
           </div>
+        </div>
 
-          <Box textAlign={'center'} mt={2}>
+        <Box sx={{mt: 2}}>
+          <AnimateButton>
             <LoadingButton
+              disableElevation
+              disabled={loading}
+              fullWidth
+              size='large'
               type='submit'
               variant='contained'
+              color='secondary'
               loading={loading}
-              data-cy='create-company-button'
+              data-cy='company-create-button'
             >
               Create Shop
             </LoadingButton>
-          </Box>
+          </AnimateButton>
         </Box>
+
+        {error && (
+          <Grid xs={12} container direction="row" alignItems='center' justifyContent='center'>
+            <Typography variant='caption' fontSize='16px' textAlign="center" color="palevioletred">
+              Error Happened!
+            </Typography>
+          </Grid>
+        )}
       </form>
     </MainCard>
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    isCreating: state.create.isCreating,
-    created: state.create.created,
-    creatingError: state.create.creatingError,
-    url: state.create.url,
-    progress: state.create.progress,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    createBusiness: (credentials) => dispatch(createBusiness(credentials)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CompanyCreate);
+export default CompanyCreate;

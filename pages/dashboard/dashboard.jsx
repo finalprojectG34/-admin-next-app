@@ -1,10 +1,7 @@
 import {useEffect, useState} from 'react';
 
-// material-ui
 import {Grid} from '@mui/material';
-import {gridSpacing} from '../../src/store/customization/constant';
 
-// ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Dashboard = () => {
   const [isLoading, setLoading] = useState(true);
@@ -14,9 +11,9 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Grid container spacing={gridSpacing}>
+    <Grid container spacing={4}>
       <Grid item xs={12}>
-        <Grid container spacing={gridSpacing}>
+        <Grid container spacing={4}>
           <Grid item lg={4} md={6} sm={6} xs={12}>
             1
             {/*<EarningCard isLoading={isLoading} />*/}
@@ -26,7 +23,7 @@ const Dashboard = () => {
             {/*<TotalOrderLineChartCard isLoading={isLoading} />*/}
           </Grid>
           <Grid item lg={4} md={12} sm={12} xs={12}>
-            <Grid container spacing={gridSpacing}>
+            <Grid container spacing={4}>
               <Grid item sm={6} xs={12} md={6} lg={12}>
                 3
                 {/*<TotalIncomeDarkCard isLoading={isLoading} />*/}

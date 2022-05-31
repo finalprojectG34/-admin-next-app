@@ -1,4 +1,5 @@
-// material-ui
+import {useLazyQuery, useMutation} from '@apollo/client';
+
 import {
   Alert,
   Paper,
@@ -12,18 +13,39 @@ import {
 } from '@mui/material';
 import {HighlightOffOutlined} from '@mui/icons-material';
 
-// project imports
 import MainCard from '../../../src/ui-components/cards/MainCard';
-import {useMutation, useQuery} from '@apollo/client';
-import {GET_ALL_USERS} from "../../../src/apollo/queries/user_queries";
-import {DELETE_USER} from "../../../src/apollo/mutations/user_mutation";
 import Loader from "../../../src/ui-components/Loader";
 
-// ==============================|| SAMPLE PAGE ||============================== //
+import {GET_ALL_USERS} from "../../../src/apollo/queries/user_queries";
+import {DELETE_USER} from "../../../src/apollo/mutations/user_mutation";
+
+import {useEffect, useState} from 'react';
+
+const ITEM_HEIGHT = 48;
+
 
 const UserList = () => {
-  const {data, error, loading} = useQuery(GET_ALL_USERS);
+  const [getUsers, {data, error, loading}] = useLazyQuery(GET_ALL_USERS, {
+    nextFetchPolicy: "network-only"
+  });
   const [deleteUser] = useMutation(DELETE_USER);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  useEffect(() => {
+    getUsers().then((d) => {
+      console.log(d)
+    })
+  }, [])
 
   if (error)
     return (
@@ -33,7 +55,7 @@ const UserList = () => {
     );
   if (loading) return <Loader/>;
   return (
-    <MainCard title='User List'>
+    <MainCard title='User List' sx={{margin: 'auto'}} style={{maxWidth: 'max-content'}}>
       <Typography variant='body2' component="div">
         <TableContainer component={Paper}>
           <Table sx={{minWidth: 650, bgcolor: '#00000021'}}>
@@ -48,23 +70,21 @@ const UserList = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.getAllUsers?.map((user, index) =>
+              {data?.getAllUsers?.map((user, index) =>
                 !user ? null : (
                   <TableRow
                     key={user.id}
                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                    data-cy='user-list-element'
                   >
-                    <TableCell component='th' scope='row'>
-                      {index + 1}
-                    </TableCell>
+                    <TableCell component='th' scope='row'>{index + 1}</TableCell>
                     <TableCell align='right'>{user.firstName}</TableCell>
                     <TableCell align='right'>{user.lastName}</TableCell>
                     <TableCell align='right'>{user.email}</TableCell>
                     <TableCell align='right'>{user.phone}</TableCell>
                     <TableCell align='right'>
                       <HighlightOffOutlined
-                        color='error'
-                        sx={{cursor: 'pointer'}}
+                        data-cy='user-delete-element'
                         onClick={() => {
                           deleteUser({
                             variables: {
@@ -73,9 +93,11 @@ const UserList = () => {
                             update: cache => {
                               cache.evict({id: 'User:' + user.id});
                             }
+                          }).then(() => {
+
                           });
                         }}
-                      />
+                        color='error' sx={{cursor: 'pointer'}} fontSize="small"/>
                     </TableCell>
                   </TableRow>
                 )

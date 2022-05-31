@@ -1,12 +1,12 @@
 import NavigationDrawer from "../../../src/ui-components/navigation";
-import CompanyList from "./shop-list";
+import CompanySearch from "./shop-search";
 
-const CompanyCreatePage = () => {
+const CompanySearchPage = () => {
   return (
     <NavigationDrawer>
-      <CompanyList/>
+      <CompanySearch/>
     </NavigationDrawer>
   );
 };
 
-export default CompanyCreatePage;
+export default CompanySearchPage;
