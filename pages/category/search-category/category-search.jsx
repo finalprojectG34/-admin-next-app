@@ -1,5 +1,5 @@
-// material-ui
 import {useState} from 'react';
+import {useLazyQuery} from '@apollo/client';
 
 import {
   Alert,
@@ -15,12 +15,12 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import {useLazyQuery} from '@apollo/client';
 
-// project imports
-import {GET_ONE_CATEGORY} from "../../../src/apollo/queries/category_queries";
 import Loader from "../../../src/ui-components/Loader";
 import MainCard from "../../../src/ui-components/cards/MainCard";
+
+import {GET_ONE_CATEGORY} from "../../../src/apollo/queries/category_queries";
+
 
 const CategorySearch = () => {
   const [getCategory, {data, error, loading}] = useLazyQuery(GET_ONE_CATEGORY);

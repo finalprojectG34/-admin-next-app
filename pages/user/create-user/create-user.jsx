@@ -26,11 +26,12 @@ const UserCreate = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(
-      {   firstName,
-      lastName,
-      phone,
-      role
-  })
+      {
+        firstName,
+        lastName,
+        phone,
+        role
+      })
     createUser({
       variables: {
         input: {
@@ -95,12 +96,10 @@ const UserCreate = () => {
             onChange={(e) => setRole(e.target.value)}
             data-cy='user-role-select'
           >
-            {/*<option value="user">USER</option>*/}
-            {/*<option value='admin'>ADMIN</option>*/}
             <MenuItem value='user'>USER</MenuItem>
             <MenuItem value='admin'>ADMIN</MenuItem>
-            {/*<MenuItem value='seller'>SELLER</MenuItem>*/}
-            {/*<MenuItem value='super'>SUPER</MenuItem>*/}
+            <MenuItem value='seller'>SELLER</MenuItem>
+            <MenuItem value='super'>SUPER</MenuItem>
           </Select>
         </FormControl>
 

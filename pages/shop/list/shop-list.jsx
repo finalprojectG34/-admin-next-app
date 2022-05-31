@@ -76,7 +76,8 @@ const CompanyList = () => {
                               cache.evict({id: 'Category:' + category.id});
                             }
                           })
-                            .then(() => {});
+                            .then(() => {
+                            });
                         }}
                       />
                     </TableCell>

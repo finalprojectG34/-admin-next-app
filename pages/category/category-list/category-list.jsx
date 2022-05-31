@@ -1,4 +1,5 @@
-// material-ui
+import {useMutation, useQuery} from '@apollo/client';
+
 import {
   Alert,
   Paper,
@@ -11,13 +12,13 @@ import {
   Typography
 } from '@mui/material';
 import {HighlightOffOutlined} from '@mui/icons-material';
-import {useMutation, useQuery} from '@apollo/client';
 
-// project imports
-import {GET_ALL_CATEGORIES} from "../../../src/apollo/queries/category_queries";
-import {DELETE_CATEGORY} from "../../../src/apollo/mutations/category_mutation";
 import Loader from "../../../src/ui-components/Loader";
 import MainCard from "../../../src/ui-components/cards/MainCard";
+
+import {GET_ALL_CATEGORIES} from "../../../src/apollo/queries/category_queries";
+import {DELETE_CATEGORY} from "../../../src/apollo/mutations/category_mutation";
+
 
 const CategoryList = () => {
   const {data, error, loading} = useQuery(GET_ALL_CATEGORIES);

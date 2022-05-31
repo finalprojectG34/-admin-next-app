@@ -76,7 +76,8 @@ const UserSearch = () => {
                     variables: {
                       getUserByIdId: text
                     }
-                  }).then(() => {});
+                  }).then(() => {
+                  });
                 }}
                 data-cy='user-id-search-button'
               >
