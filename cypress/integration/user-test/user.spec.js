@@ -122,6 +122,7 @@ describe('User E2E Testing', () => {
   })
 
   it.skip('delete the first user', () => {
+    cy.visit('http://localhost:3000/user/user-list');
     cy.get('[data-cy=user-delete-element]').first()
       .click();
   });

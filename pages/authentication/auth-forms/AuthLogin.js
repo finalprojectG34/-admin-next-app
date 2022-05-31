@@ -61,7 +61,10 @@ const FirebaseLogin = () => {
     }).then(res => {
       setSessionToken("accessToken");
       setRolesData(['ADMIN']);
-    });
+    })
+      .catch(e => {
+        console.log("error login", e)
+      });
   };
 
   useEffect(() => {
@@ -100,6 +103,7 @@ const FirebaseLogin = () => {
           type='text'
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
+          data-cy='login-phone-input'
         />
         <Box style={{margin: "30px"}}/>
         <FormControl fullWidth
@@ -111,6 +115,7 @@ const FirebaseLogin = () => {
             type={showPassword ? 'text' : 'password'}
             value={password}
             name='password'
+            data-cy='login-password-input'
             onChange={(e) => setPassword(e.target.value)}
             endAdornment={
               <InputAdornment position='end'>
@@ -156,6 +161,7 @@ const FirebaseLogin = () => {
               type='submit'
               variant='contained'
               color='secondary'
+              data-cy='login-phone-button'
               loading={loading}
             >
               Sign In
@@ -164,7 +170,7 @@ const FirebaseLogin = () => {
         </Box>
 
         {error && (
-          <Grid xs={12} container direction="row" alignItems='center' justifyContent='center'>
+          <Grid data-cy='login-error-container' xs={12} container direction="row" alignItems='center' justifyContent='center'>
             <Typography variant='caption' fontSize='16px' textAlign="center" color="palevioletred">
               Error Happened!
             </Typography>

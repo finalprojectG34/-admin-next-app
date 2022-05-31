@@ -51,6 +51,7 @@ const CompanyList = () => {
                   <TableRow
                     key={company.id}
                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                    data-cy='shop-list-element'
                   >
                     <TableCell component='th' scope='row'>
                       {index + 1}
@@ -60,11 +61,11 @@ const CompanyList = () => {
                     <TableCell align='left'>{company.tinNumber}</TableCell>
                     <TableCell
                       align='center'>
-                      {`${company.address.city}, ${company.address.suubCity}, ${company.address.addressName}`}
+                      {`${company.address.city}, ${company.address.subCity}, ${company.address.addressName}`}
                     </TableCell>
                     <TableCell align='right'>
                       <HighlightOffOutlined
-                        data-cy='delete-category'
+                        data-cy='shop-delete-element'
                         color='error'
                         sx={{cursor: 'pointer'}}
                         onClick={() => {
@@ -73,7 +74,7 @@ const CompanyList = () => {
                               deleteCompanyId: company.id
                             },
                             update: cache => {
-                              cache.evict({id: 'Category:' + category.id});
+                              cache.evict({id: 'Company:' + company.id});
                             }
                           })
                             .then(() => {

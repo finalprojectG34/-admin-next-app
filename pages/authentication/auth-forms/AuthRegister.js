@@ -32,11 +32,8 @@ const FirebaseRegister = () => {
   const router = useRouter();
 
   const theme = useTheme();
-  // const scriptedRef = useScriptRef();
-  // const customization = useSelector((state) => state.customization);
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const [showPassword, setShowPassword] = useState(false);
-  // const [checked, setChecked] = useState(true);
   const [confirmation, setConfirmation] = useState(null);
 
   const [firstName, setFirstName] = useState('');
@@ -44,7 +41,6 @@ const FirebaseRegister = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [checkPassword, setCheckPassword] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
 
   const [sessionToken, setSessionToken] = useLocalStorage('store', null);
@@ -52,9 +48,6 @@ const FirebaseRegister = () => {
 
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [signUpError, setSignUpError] = useState(false);
-
-  // const [strength, setStrength] = useState(0);
-  // const [level, setLevel] = useState();
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -128,12 +121,15 @@ const FirebaseRegister = () => {
 
   useEffect(() => {
     if (sessionToken) {
+      console.log("here1")
       router.push('/');
     }
     if (sessionToken && rolesData) {
       if (rolesData.token.indexOf('ADMIN') === -1) {
+        console.log("here2")
         router.push('/404/access-denied');
       } else {
+        console.log("here3")
         router.push('/');
       }
     }
@@ -164,6 +160,7 @@ const FirebaseRegister = () => {
               type='text'
               value={verificationCode}
               onChange={(e) => setVerificationCode(e.target.value)}
+              data-cy='register-verificationCode-input'
             />
 
             <Box sx={{mt: 2}}>
@@ -177,13 +174,14 @@ const FirebaseRegister = () => {
                   variant='contained'
                   color='secondary'
                   loading={loading}
+                  data-cy='register-verification-button'
                 >
                   Verify
                 </LoadingButton>
               </AnimateButton>
             </Box>
 
-            <Grid xs={12} container
+            <Grid container
                   direction="row"
                   alignItems='center'
                   justifyContent='center'>
@@ -230,6 +228,7 @@ const FirebaseRegister = () => {
                   type='text'
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
+                  data-cy='register-firstName-input'
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -240,6 +239,7 @@ const FirebaseRegister = () => {
                   type='text'
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
+                  data-cy='register-lastName-input'
                 />
               </Grid>
             </Grid>
@@ -251,6 +251,7 @@ const FirebaseRegister = () => {
               type='text'
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
+              data-cy='register-phoneNumber-input'
             />
             <Box style={{margin: "20px"}}/>
             <TextField
@@ -260,6 +261,7 @@ const FirebaseRegister = () => {
               type='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              data-cy='register-email-input'
             />
             <Box style={{margin: "20px"}}/>
             <FormControl fullWidth
@@ -273,6 +275,7 @@ const FirebaseRegister = () => {
                 name='password'
                 label='Password'
                 onChange={(e) => setPassword(e.target.value)}
+                data-cy='register-password-input'
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
@@ -321,6 +324,7 @@ const FirebaseRegister = () => {
                   variant='contained'
                   color='secondary'
                   loading={isSigningUp}
+                  data-cy='register-button'
                 >
                   Sign Up
                 </LoadingButton>

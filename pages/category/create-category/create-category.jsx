@@ -65,9 +65,9 @@ const CategoryCreate = () => {
               variant='contained'
               color='secondary'
               loading={loading}
-              data-cy='user-create-button'
+              data-cy='category-create-button'
             >
-              Create User
+              Create Category
             </LoadingButton>
           </AnimateButton>
         </Box>

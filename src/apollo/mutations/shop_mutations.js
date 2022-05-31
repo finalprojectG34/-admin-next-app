@@ -33,12 +33,6 @@ export const DELETE_COMPANY = gql`
   mutation Mutation($deleteCompanyId: ID!) {
     deleteCompany(id: $deleteCompanyId) {
       id
-      slug
-      name
-      ownerId
-      description
-      haveLicense
-      tinNumber
     }
   }
 `;

@@ -7,7 +7,7 @@ describe('Shop E2E Testing', () => {
     // logout
   });
 
-  it.skip('create shop from DOM', () => {
+  it('create shop from DOM', () => {
     const name = 'My new Shop';
     const description = 'all in one';
     const city = 'Addis Ababa';
@@ -28,7 +28,7 @@ describe('Shop E2E Testing', () => {
     cy.wait(5000);
   });
 
-  it.skip('create shop using post request', () => {
+  it('create shop using post request', () => {
 
     const name = 'clothes shop';
     const description = 'yr turkey clothes';
@@ -111,28 +111,25 @@ describe('Shop E2E Testing', () => {
     });
   });
 
-  it.skip('displays display list of users', () => {
-    cy.visit('http://localhost:3000/user/user-list');
+  it('displays display list of shops', () => {
+    cy.visit('http://localhost:3000/shop/list');
     cy.wait(5000);
-    cy.get('[data-cy=user-list-element]').should("have.length.at.least", 2);
+    cy.get('[data-cy=shop-list-element]').should("have.length.at.least", 2);
   });
 
-  it.skip("search users by ID", () => {
-    const GET_ALL_USER = `
-      query {
-        getAllUsers {
+  it.skip("search shop by ID", () => {
+    const GET_ALL_SHOP = `
+      query GetAllCompanies {
+        getAllCompanies {
           id
-          firstName
-          lastName
-          email
-          phone
+          name
         }
       }
     `;
 
     let id;
 
-    cy.visit('http://localhost:3000/user/search-user');
+    cy.visit('http://localhost:3000/shop/search');
 
     cy.request({
       url: '/',
@@ -141,27 +138,28 @@ describe('Shop E2E Testing', () => {
         'Content-Type': 'application/json'
       },
       body: {
-        query: GET_ALL_USER,
+        query: GET_ALL_SHOP,
       }
     }).then(response => {
-      id = response.body.data?.getAllUsers[0]?.id;
-      cy.get('[data-cy=user-id-search-input]').type(id);
-      cy.get('[data-cy=user-id-search-button]').click();
+      id = response.body.data?.getAllCompanies[0]?.id;
+      cy.get('[data-cy=shop-id-search-input]').type(id);
+      cy.get('[data-cy=shop-id-search-button]').click();
       cy.wait(10000);
 
-      cy.get('[data-cy=user-id-search-result]').should("contain", id);
+      cy.get('[data-cy=shop-id-search-result]').should("contain", id);
     });
 
   })
 
-  it.skip('delete the first user', () => {
-    cy.get('[data-cy=user-delete-element]').first()
+  it('delete the first shop', () => {
+    cy.visit('http://localhost:3000/shop/list');
+    cy.get('[data-cy=shop-delete-element]').first()
       .click();
   });
 
-  it.skip('delete all users', () => {
-    cy.get('[data-cy=user-delete-element]')
+  it('delete all shop', () => {
+    cy.get('[data-cy=shop-delete-element]')
       .click({multiple: true});
-    cy.get('[data-cy=user-list-element]').should("have.length", 0);
+    cy.get('[data-cy=shop-list-element]').should("have.length", 0);
   });
 });
