@@ -10,16 +10,150 @@
 //
 //
 // -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
+Cypress.Commands.add('login', (phoneNumber, password, caller) => {
+    const LOGIN = `
+      mutation Login($input: loginInput!) {
+        login(input: $input) {
+          user {
+            phone
+            id
+            firstName
+            lastName
+            password
+            email
+          }
+          token
+        }
+      }
+    `;
+
+    cy.request({
+        url: '/',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: {
+            query: LOGIN,
+            variables: {
+                "input": {
+                    "info": '+251' + phoneNumber.toString().substr(phoneNumber.length - 9),
+                    "info_type": "phone",
+                    "password": password
+                }
+            }
+        }
+    }).then(response => {
+        const data = response.body;
+        caller(data)
+    });
+})
+
 // -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
+Cypress.Commands.add('storeToLocalStorage', (token) => {
+    localStorage.setItem("store", JSON.stringify({token}));
+})
+
+Cypress.Commands.add('removeFromLocalStorage', () => {
+    localStorage.clear();
+})
+
+Cypress.Commands.add('signUpFromDom', (
+    {firstName, lastName, phoneNumber, password, email, verificationCode},
+    caller
+) => {
+    cy.intercept('POST', 'http://localhost:8000/graphql').as('register-user')
+    cy.visit('http://localhost:3000/register');
+
+    cy.get('[data-cy=register-firstName-input]').type(firstName);
+    cy.get('[data-cy=register-lastName-input]').type(lastName);
+    cy.get('[data-cy=register-phoneNumber-input]').type(phoneNumber);
+    cy.get('[data-cy=register-password-input]').type(password);
+    cy.get('[data-cy=register-email-input]').type(email);
+    cy.get('[data-cy=register-button]').click();
+    cy.wait(25000);
+    cy.get('[data-cy=register-verificationCode-input]').type(verificationCode);
+    cy.get('[data-cy=register-verification-button]').click();
+    cy.wait('@register-user').then(({response}) => {
+        console.log("res", response)
+        caller(response.body)
+    })
+})
+
+
 // -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
+Cypress.Commands.add('createShop', ({
+                                        name, description, city, subCity, addressName, tinNumber, phoneNumber
+                                    }, caller) => {
+
+    const CREATE_USER = `
+      mutation Mutation($input: CompanyCreateInput!) {
+        createCompany(input: $input) {
+          id
+          name
+          ownerId
+          address {
+            location {
+              type
+              coordinates
+            }
+            subCity
+            city
+            addressName
+          }
+          description
+          tinNumber
+          image {
+            images
+            imageCover
+            bgImage
+            suffix
+            imagePath
+          }
+          status
+        }
+      }
+    `;
+
+    cy.request({
+        url: '/',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: {
+            query: CREATE_USER,
+            variables: {
+                "input": {
+                    "name": name,
+                    "description": description,
+                    "ownerID": "6293bb9598be04cb9f7df319",
+                    "phoneNumber": phoneNumber,
+                    "address": {
+                        "location": {
+                            "coordinates": [654.545, 864.64554],
+                            "type": "Point"
+                        },
+                        "subCity": subCity,
+                        "city": city,
+                        "addressName": addressName
+                    },
+                    "tinNumber": tinNumber,
+                    "image": {
+                        "images": ["url"],
+                        "bgImage": "bgImage",
+                        "imageCover": "null",
+                        "suffix": "null",
+                        "imagePath": "url"
+                    }
+                }
+            }
+        }
+    }).then(response => {
+        caller(response.body)
+    });
+})
+
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })

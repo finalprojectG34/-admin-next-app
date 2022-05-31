@@ -9,20 +9,20 @@ import config from "../config";
 import '../styles/globals.css';
 
 function MyApp({Component, pageProps}) {
-  return (
-    <ApolloProvider client={client}>
-      {/*<Provider store={store}>*/}
-      <ThemeProvider theme={themes({
-        isOpen: [], // for active default menu
-        fontFamily: config.fontFamily,
-        borderRadius: config.borderRadius,
-        opened: false
-      })}>
-        <Component {...pageProps} />
-      </ThemeProvider>
-      {/*</Provider>*/}
-    </ApolloProvider>
-  )
+    return (
+        <ApolloProvider client={client}>
+            {/*<Provider store={store}>*/}
+            <ThemeProvider theme={themes({
+                isOpen: [], // for active default menu
+                fontFamily: config.fontFamily,
+                borderRadius: config.borderRadius,
+                opened: false
+            })}>
+                <Component {...pageProps} />
+            </ThemeProvider>
+            {/*</Provider>*/}
+        </ApolloProvider>
+    )
 }
 
 export default MyApp

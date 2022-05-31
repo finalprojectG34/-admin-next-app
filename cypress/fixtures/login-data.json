@@ -1,0 +1,22 @@
+{
+    "allValid": {
+        "phoneNumber": "+251900000000",
+        "password": "password"
+    },
+    "invalidPhone": {
+        "phoneNumber": "+25190000000wds",
+        "password": "password"
+    },
+    "invalidPassword": {
+        "phoneNumber": "+251900000000",
+        "password": "sdfsd"
+    },
+    "bothInvalid": {
+        "phoneNumber": "25190000",
+        "password": "123"
+    },
+    "bothEmpty": {
+        "phoneNumber": "",
+        "password": ""
+    }
+}

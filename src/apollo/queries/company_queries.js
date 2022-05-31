@@ -80,3 +80,15 @@ export const GET_ALL_COMPANY = gql`
     }
   }
 `;
+
+export const GET_ONE_COMPANY = gql`
+  query GetOneCompany($getOneCompanyId: String!) {
+    getOneCompany(id: $getOneCompanyId) {
+      id
+      name
+      description
+      tinNumber
+      phoneNumber
+    }
+  }
+`;

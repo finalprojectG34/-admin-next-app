@@ -1,0 +1,38 @@
+{
+    "allValid": {
+        "name": "clothes shop",
+        "description": "ye turkey clothes",
+        "city": "Addis Ababa",
+        "phoneNumber": "+251946636363",
+        "subCity": "piyassa",
+        "addressName": "mahmud musika",
+        "tinNumber": "874894512"
+    },
+    "inValidPhoneNumber": {
+        "name": "clothes shop",
+        "description": "ye turkey clothes",
+        "phoneNumber": "+465421",
+        "city": "Addis Ababa",
+        "subCity": "piyassa",
+        "addressName": "mahmud musika",
+        "tinNumber": "874894512"
+    },
+    "missingInfo": {
+        "name": "",
+        "description": "ye turkey clothes",
+        "city": "Addis Ababa",
+        "phoneNumber": "+251946636363",
+        "subCity": "piyassa",
+        "addressName": "mahmud musika",
+        "tinNumber": "874894512"
+    },
+    "emptyPhone": {
+        "name": "clothes shop",
+        "description": "ye turkey clothes",
+        "city": "Addis Ababa",
+        "phoneNumber": "",
+        "subCity": "piyassa",
+        "addressName": "mahmud musika",
+        "tinNumber": "874894512"
+    }
+}

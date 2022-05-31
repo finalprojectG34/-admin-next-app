@@ -48,6 +48,7 @@ export const SIGN_UP = gql`
         password
         email
       }
+      token
     }
   }
 `;
@@ -63,6 +64,7 @@ export const SIGN_IN = gql`
         password
         email
       }
+      token
     }
   }
 `;
