@@ -1,23 +1,26 @@
-import React from "react";
-import {Redirect, Route} from "react-router-dom";
+import React, {useEffect} from "react";
+import {useRouter} from "next/router";
 
 import useLocalStorage from "../../hooks/useLocalStorage";
 
-const ProtectedRoute = ({
-                            children,
-                            path,
-                            ...rest
-                        }) => {
-    const [data] = useLocalStorage("store", null);
-    const [roles] = useLocalStorage("roles", null);
-    if (!data) {
-        return <Redirect to="/signin"/>;
-    }
-    if (roles) {
-        if (roles.token.indexOf("OWNER") < 0)
-            return <Redirect to="/access-denied"/>;
-    }
-    return <Route {...rest}>{children}</Route>;
+
+const ProtectedRoute = ({children}) => {
+    const router = useRouter();
+    // const [data] = useLocalStorage("store", null);
+    // const [roles] = useLocalStorage("roles", null);
+
+    useEffect(() => {
+        const data = localStorage.getItem("store");
+        if (!data) {
+            router.replace('/login');
+        }
+        // if (roles) {
+        //     if (roles.token.indexOf("ADMIN") < 0)
+        //         router.replace("/access-denied")
+        // }
+    }, [])
+
+    return <>{children}</>;
 };
 
 export default ProtectedRoute;

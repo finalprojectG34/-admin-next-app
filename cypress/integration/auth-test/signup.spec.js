@@ -1,27 +1,24 @@
 describe('Sign Up E2E Testing', () => {
     let inputs;
 
-    beforeEach(() => {
-        // logout
-        // cy.visit('http://localhost:3000/logout');
-        cy.removeFromLocalStorage();
-
+    before(() => {
         //load login data
         cy.fixture("signup-data").then(val => {
             inputs = val;
         });
+    })
 
-        // cy.visit('http://localhost:3000/user/user-list');
-        // cy.get('[data-cy=user-delete-element]')
-        //   .click({multiple: true});
-        // cy.get('[data-cy=user-list-element]').should("have.length", 0);
+    beforeEach(() => {
+        // logout
+        // cy.visit('http://localhost:3000/logout');
+        cy.removeFromLocalStorage();
     });
 
-    it.skip('Check logout', () => {
+    it('Check logout', () => {
         expect(localStorage.getItem('store')).to.eq(null);
     });
 
-    it.skip('check signup with valid phoneNumber, valid password, valid fullName, and valid phoneNumber', () => {
+    it('check signup with valid phoneNumber, valid password, valid fullName, and valid phoneNumber', () => {
         const firstName = inputs["allValid"].firstName;
         const lastName = inputs["allValid"].lastName;
         const phoneNumber = inputs["allValid"].phoneNumber;
@@ -32,10 +29,10 @@ describe('Sign Up E2E Testing', () => {
         cy.signUpFromDom({firstName, lastName, phoneNumber, password, email, verificationCode}, (body) => {
             console.log(body)
             expect(localStorage.getItem('store')).to.not.eq(null);
-        })
+        });
     });
 
-    it.skip('check signup with invalid phoneNumber', () => {
+    it('check signup with invalid phoneNumber', () => {
         const firstName = inputs["inValidPhoneNumber"].firstName;
         const lastName = inputs["inValidPhoneNumber"].lastName;
         const phoneNumber = inputs["inValidPhoneNumber"].phoneNumber;
@@ -43,13 +40,14 @@ describe('Sign Up E2E Testing', () => {
         const email = inputs["inValidPhoneNumber"].email;
         const verificationCode = inputs["inValidPhoneNumber"].verificationCode;
 
-        cy.signUpFromDom({firstName, lastName, phoneNumber, password, email, verificationCode}, (body) => {
+        cy.signUpFromDom({firstName, lastName, phoneNumber, password, email, verificationCode, inValidPhone: true}, (body) => {
             console.log(body)
             expect(body?.data?.authPhoneAndRegister).to.eq(null);
+            expect(body?.errors[0].message).to.eq("Invalid PhoneNumber!");
         })
     });
 
-    it.skip('check signup with invalid password', () => {
+    it('check signup with invalid password', () => {
         const firstName = inputs["invalidPassword"].firstName;
         const lastName = inputs["invalidPassword"].lastName;
         const phoneNumber = inputs["invalidPassword"].phoneNumber;
@@ -64,7 +62,7 @@ describe('Sign Up E2E Testing', () => {
         })
     });
 
-    it.skip('check signup with invalid fullName', () => {
+    it('check signup with invalid fullName', () => {
         const firstName = inputs["invalidFullName"].firstName;
         const lastName = inputs["invalidFullName"].lastName;
         const phoneNumber = inputs["invalidFullName"].phoneNumber;
@@ -75,11 +73,11 @@ describe('Sign Up E2E Testing', () => {
         cy.signUpFromDom({firstName, lastName, phoneNumber, password, email, verificationCode}, (body) => {
             console.log(body)
             expect(body?.data?.authPhoneAndRegister).to.eq(null);
-            expect(body?.errors[0].message).to.eq("User does not exist");
+            expect(body?.errors[0].message).to.eq("\"firstName\" must only contain alpha-numeric characters");
         })
     });
 
-    it.skip('check signup making some inputs empty', () => {
+    it('check signup making some inputs empty', () => {
         const firstName = inputs["allEmpty"].firstName;
         const lastName = inputs["allEmpty"].lastName;
         const phoneNumber = inputs["allEmpty"].phoneNumber;

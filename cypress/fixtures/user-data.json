@@ -1,0 +1,42 @@
+{
+    "allValid": {
+        "firstName": "Bereket",
+        "lastName": "Zemed",
+        "phoneNumber": "+251900000000",
+        "password": "password",
+        "email": "email@gmail.com",
+        "verificationCode": "000000"
+    },
+    "inValidPhoneNumber": {
+        "firstName": "Bereket",
+        "lastName": "Zemed",
+        "phoneNumber": "+25190000d",
+        "password": "password",
+        "email": "email@gmail.com",
+        "verificationCode": "000000"
+    },
+    "invalidPassword": {
+        "firstName": "Bereket",
+        "lastName": "Zemed",
+        "phoneNumber": "+251900000000",
+        "password": "pas",
+        "email": "email@gmail.com",
+        "verificationCode": "000000"
+    },
+    "invalidFullName": {
+        "firstName": "Bereket@",
+        "lastName": "Ze12",
+        "phoneNumber": "+251900000000",
+        "password": "password",
+        "email": "email@gmail.com",
+        "verificationCode": "000000"
+    },
+    "allEmpty": {
+        "firstName": "",
+        "lastName": "",
+        "phoneNumber": "",
+        "password": "",
+        "email": "",
+        "verificationCode": "000000"
+    }
+}

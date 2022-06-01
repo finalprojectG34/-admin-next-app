@@ -1,24 +1,26 @@
 describe('Shop E2E Testing', () => {
-    let inputs;
+    let inputs, logInInputs;
 
-    beforeEach(() => {
-        //login
-        const phoneNumber = '+251900000000';
-        const password = 'password';
-
-        // cy.login(phoneNumber, password, false)
+    before(() => {
         //load company data
         cy.fixture("company-data").then(val => {
             inputs = val;
-        })
+        });
+        cy.fixture("login-data").then(val => {
+            logInInputs = val;
+
+            //login
+            const phoneNumber = logInInputs["allValid"].phoneNumber;
+            const password = logInInputs["allValid"].password;
+
+            cy.login(phoneNumber, password, (body) => {
+                expect(body.data?.login).to.not.eq(null);
+                cy.storeToLocalStorage(body?.data?.login.token)
+            });
+        });
     });
 
-    afterEach(() => {
-        // logout
-        // cy.visit('http://localhost:3000/logout');
-    });
-
-    it.skip('create shop from DOM', () => {
+    it('create shop from DOM', () => {
         const name = inputs["allValid"].name;
         const description = inputs["allValid"].description;
         const city = inputs["allValid"].city;
@@ -55,7 +57,7 @@ describe('Shop E2E Testing', () => {
         })
     });
 
-    it.skip('create company with a valid info, and valid auth token', () => {
+    it('create company with a valid info, and valid auth token', () => {
 
         const name = inputs["allValid"].name;
         const description = inputs["allValid"].description;
@@ -94,11 +96,11 @@ describe('Shop E2E Testing', () => {
         }, (body) => {
             console.log(body)
             expect(body?.data?.createCompany).to.eq(null);
-            expect(body?.errors[0].message).to.eq("User does not exist");
+            expect(body?.errors[0].message).to.eq("Invalid PhoneNumber!");
         });
     });
 
-    it.skip('create company with missing info', () => {
+    it('create company with missing info', () => {
 
         const name = inputs["missingInfo"].name;
         const description = inputs["missingInfo"].description;
@@ -113,7 +115,7 @@ describe('Shop E2E Testing', () => {
         }, (body) => {
             console.log(body)
             expect(body?.data?.createCompany).to.eq(null);
-            expect(body?.errors[0].message).to.eq("User does not exist");
+            expect(body?.errors[0].message).to.eq("");
         });
     });
 
@@ -132,14 +134,16 @@ describe('Shop E2E Testing', () => {
         }, (body) => {
             console.log(body)
             expect(body?.data?.createCompany).to.eq(null);
-            expect(body?.errors[0].message).to.eq("User does not exist");
+            expect(body?.errors[0].message).to.eq("Invalid PhoneNumber");
         });
     });
 
-    it.skip('displays display list of shops', () => {
+    it('displays list of shops', () => {
+        cy.intercept('POST', 'http://localhost:8000/graphql').as('shop-list')
         cy.visit('http://localhost:3000/shop/list');
-        cy.wait(5000);
-        cy.get('[data-cy=shop-list-element]').should("have.length.at.least", 2);
+        cy.wait("@shop-list").then(() => {
+            cy.get('[data-cy=shop-list-element]').should("have.length.at.least", 2);
+        });
     });
 
     it("check get company by a valid id field", () => {
@@ -167,48 +171,55 @@ describe('Shop E2E Testing', () => {
             }
         }).then(response => {
             id = response.body.data?.getAllCompanies[0]?.id;
+            cy.intercept('POST', 'http://localhost:8000/graphql').as('valid-field')
             cy.get('[data-cy=shop-id-search-input]').type(id);
             cy.get('[data-cy=shop-id-search-button]').click();
-            cy.wait(10000);
-
-            cy.get('[data-cy=shop-id-search-result]').should("contain", id);
+            cy.wait("@valid-field").then(() => {
+                cy.get('[data-cy=shop-id-search-result]').should("contain", id);
+            });
         });
     });
 
     it("check get company by a invalid id field", () => {
         const id = "507f1f77bcf86cd799439011";
-
+        cy.intercept('POST', 'http://localhost:8000/graphql').as('invalid-field')
         cy.visit('http://localhost:3000/shop/search');
 
         cy.get('[data-cy=shop-id-search-input]').type(id);
         cy.get('[data-cy=shop-id-search-button]').click();
-        cy.wait(10000);
-
-        cy.get('[data-cy=shop-id-search-result]').should("not.exist");
+        cy.wait("@invalid-field").then(() => {
+            cy.get('[data-cy=shop-id-search-result]').should("not.exist");
+        });
     });
 
-    it("check get company by a empty id field", () => {
+    it.skip("check get company by a empty id field", () => {
         const id = "";
 
         cy.visit('http://localhost:3000/shop/search');
 
-        cy.get('[data-cy=shop-id-search-input]').type(id);
+        // cy.get('[data-cy=shop-id-search-input]').type(id);
         cy.get('[data-cy=shop-id-search-button]').click();
         cy.wait(10000);
 
         cy.get('[data-cy=shop-id-search-result]').should("not.exist");
     });
 
-    it.skip('delete the first shop', () => {
+    it('delete the first shop', () => {
+        cy.intercept('POST', 'http://localhost:8000/graphql').as('shop-list')
         cy.visit('http://localhost:3000/shop/list');
-        cy.get('[data-cy=shop-delete-element]').first()
-            .click();
+        cy.wait("@shop-list").then(() => {
+            cy.get('[data-cy=shop-delete-element]').first()
+                .click();
+        });
     });
 
     it.skip('delete all shop', () => {
+        cy.intercept('POST', 'http://localhost:8000/graphql').as('shop-list-all')
         cy.visit('http://localhost:3000/shop/list');
-        cy.get('[data-cy=shop-delete-element]')
-            .click({multiple: true});
-        cy.get('[data-cy=shop-list-element]').should("have.length", 0);
+        cy.wait("@shop-list-all").then(() => {
+            cy.get('[data-cy=shop-delete-element]')
+                .click({multiple: true});
+            cy.get('[data-cy=shop-list-element]').should("have.length", 0);
+        });
     });
 });

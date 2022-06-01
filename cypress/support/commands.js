@@ -45,12 +45,14 @@ Cypress.Commands.add('login', (phoneNumber, password, caller) => {
         }
     }).then(response => {
         const data = response.body;
+        console.log(data)
         caller(data)
     });
 })
 
 // -- This is a child command --
 Cypress.Commands.add('storeToLocalStorage', (token) => {
+    console.log(token)
     localStorage.setItem("store", JSON.stringify({token}));
 })
 
@@ -59,25 +61,33 @@ Cypress.Commands.add('removeFromLocalStorage', () => {
 })
 
 Cypress.Commands.add('signUpFromDom', (
-    {firstName, lastName, phoneNumber, password, email, verificationCode},
+    {firstName, lastName, phoneNumber, password, email, verificationCode, inValidPhone},
     caller
 ) => {
     cy.intercept('POST', 'http://localhost:8000/graphql').as('register-user')
     cy.visit('http://localhost:3000/register');
 
-    cy.get('[data-cy=register-firstName-input]').type(firstName);
-    cy.get('[data-cy=register-lastName-input]').type(lastName);
-    cy.get('[data-cy=register-phoneNumber-input]').type(phoneNumber);
-    cy.get('[data-cy=register-password-input]').type(password);
-    cy.get('[data-cy=register-email-input]').type(email);
+    if(firstName){
+        cy.get('[data-cy=register-firstName-input]').type(firstName);
+        cy.get('[data-cy=register-lastName-input]').type(lastName);
+        cy.get('[data-cy=register-phoneNumber-input]').type(phoneNumber);
+        cy.get('[data-cy=register-password-input]').type(password);
+        cy.get('[data-cy=register-email-input]').type(email);
+    }
     cy.get('[data-cy=register-button]').click();
     cy.wait(25000);
-    cy.get('[data-cy=register-verificationCode-input]').type(verificationCode);
-    cy.get('[data-cy=register-verification-button]').click();
-    cy.wait('@register-user').then(({response}) => {
-        console.log("res", response)
-        caller(response.body)
-    })
+    if(firstName && !inValidPhone){
+        cy.get('[data-cy=register-verificationCode-input]').type(verificationCode);
+        cy.get('[data-cy=register-verification-button]').click();
+
+        cy.wait('@register-user').then(({response}) => {
+            console.log("res", response)
+            caller(response.body)
+        })
+    } else {
+        cy.get('[data-cy=register-verificationCode-input]').should("not.exist");
+        cy.get('[data-cy=register-verification-button]').should("not.exist");
+    }
 })
 
 

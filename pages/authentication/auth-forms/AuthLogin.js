@@ -170,7 +170,7 @@ const FirebaseLogin = () => {
                 </Box>
 
                 {error && (
-                    <Grid data-cy='login-error-container' xs={12} container direction="row" alignItems='center'
+                    <Grid data-cy='login-error-container' container direction="row" alignItems='center'
                           justifyContent='center'>
                         <Typography variant='caption' fontSize='16px' textAlign="center" color="palevioletred">
                             Error Happened!

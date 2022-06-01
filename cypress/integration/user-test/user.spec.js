@@ -1,16 +1,30 @@
 describe('User E2E Testing', () => {
-    beforeEach(() => {
-        //login
-        const phoneNumber = '+251900000000';
-        const password = 'password';
+    let inputs, logInInputs;
 
-        // cy.login(phoneNumber, password, false)
+    before(() => {
+        //load company data
+        cy.fixture("user-data").then(val => {
+            inputs = val;
+        });
+        cy.fixture("login-data").then(val => {
+            logInInputs = val;
+
+            //login
+            const phoneNumber = logInInputs["allValid"].phoneNumber;
+            const password = logInInputs["allValid"].password;
+
+            cy.login(phoneNumber, password, (body) => {
+                console.log(body)
+                expect(body.data?.login).to.not.eq(null);
+                cy.storeToLocalStorage(body?.data?.login.token)
+            });
+        });
     });
 
-    afterEach(() => {
-        // logout
-        cy.removeFromLocalStorage();
-    });
+    // after(() => {
+    //     // logout
+    //     cy.removeFromLocalStorage();
+    // });
 
     it('create user from DOM', () => {
         const firstName = 'Nathanael';
@@ -142,7 +156,7 @@ describe('User E2E Testing', () => {
         cy.visit('http://localhost:3000/user/search-user');
 
         const id = "";
-        cy.get('[data-cy=user-id-search-input]').type(id);
+        // cy.get('[data-cy=user-id-search-input]').type(id);
         cy.get('[data-cy=user-id-search-button]').click();
         cy.wait(2000);
 
