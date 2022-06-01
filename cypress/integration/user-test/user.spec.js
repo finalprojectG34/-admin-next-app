@@ -13,10 +13,12 @@ describe('User E2E Testing', () => {
             const phoneNumber = logInInputs["allValid"].phoneNumber;
             const password = logInInputs["allValid"].password;
 
+            // cy.intercept("POST", "http://localhost:8000/graphql").as("login");
             cy.login(phoneNumber, password, (body) => {
-                console.log(body)
                 expect(body.data?.login).to.not.eq(null);
-                cy.storeToLocalStorage(body?.data?.login.token)
+                // cy.wait("@login").then(() => {
+                    cy.storeToLocalStorage(body?.data?.login.token);
+                // });
             });
         });
     });
@@ -33,6 +35,8 @@ describe('User E2E Testing', () => {
         const phoneNumber = '+2519466252649';
         const role = 'USER';
 
+        cy.intercept("POST", "http://localhost:8000/graphql").as("create-user")
+
         cy.visit('http://localhost:3000/user/create-user');
 
         cy.get('[data-cy=user-firstName-input]').type(firstName);
@@ -47,7 +51,7 @@ describe('User E2E Testing', () => {
             .click();
 
         cy.get('[data-cy=user-create-button]').click();
-        cy.wait(5000);
+        cy.wait("@create-user");
     });
 
     it('create user using post request', () => {
@@ -58,17 +62,17 @@ describe('User E2E Testing', () => {
         const role = 'user';
 
         const CREATE_USER = `
-      mutation Mutation($input: UserCreateInput!) {
-        createUser(input: $input) {
-          id
-          firstName
-          lastName
-          phone
-          password
-          email
-        }
-      }
-    `;
+          mutation Mutation($input: UserCreateInput!) {
+            createUser(input: $input) {
+              id
+              firstName
+              lastName
+              phone
+              password
+              email
+            }
+          }
+        `;
 
         cy.request({
             url: '/',
@@ -98,23 +102,25 @@ describe('User E2E Testing', () => {
     });
 
     it('displays display list of users', () => {
+        cy.intercept("POST", "http://localhost:8000/graphql").as("create-user")
         cy.visit('http://localhost:3000/user/user-list');
-        cy.wait(5000);
-        cy.get('[data-cy=user-list-element]').should("have.length.at.least", 2);
+        cy.wait("@create-user").then(() => {
+            cy.get('[data-cy=user-list-element]').should("have.length.at.least", 2);
+        });
     });
 
     it("check get user by a valid user field", () => {
         const GET_ALL_USER = `
-      query {
-        getAllUsers {
-          id
-          firstName
-          lastName
-          email
-          phone
-        }
-      }
-    `;
+          query {
+            getAllUsers {
+              id
+              firstName
+              lastName
+              email
+              phone
+            }
+          }
+        `;
 
         let id;
 

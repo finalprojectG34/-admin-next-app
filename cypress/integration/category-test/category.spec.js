@@ -10,9 +10,12 @@ describe('Category E2E Testing', () => {
             const phoneNumber = logInInputs["allValid"].phoneNumber;
             const password = logInInputs["allValid"].password;
 
+            // cy.intercept("POST", "http://localhost:8000/graphql").as("login");
             cy.login(phoneNumber, password, (body) => {
                 expect(body.data?.login).to.not.eq(null);
-                cy.storeToLocalStorage(body?.data?.login.token)
+                // cy.wait("@login").then(() => {
+                //     cy.storeToLocalStorage(body?.data?.login.token);
+                // });
             });
         });
     });
@@ -20,6 +23,7 @@ describe('Category E2E Testing', () => {
     it('create categories from DOM', () => {
         const catName = 'cat 1';
         const catDescription = 'cat 1 description';
+
         cy.intercept("POST", "http://localhost:8000/graphql").as("list-categories");
         cy.visit('http://localhost:3000/category/create-category');
 
@@ -27,7 +31,7 @@ describe('Category E2E Testing', () => {
         cy.get('[data-cy=category-description-input]').type(catDescription);
 
         cy.get('[data-cy=category-create-button]').click();
-        cy.wait(5000);
+        cy.wait("@list-categories");
     });
 
     it('create category using post request', () => {

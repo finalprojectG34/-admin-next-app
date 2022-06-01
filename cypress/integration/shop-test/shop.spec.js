@@ -13,11 +13,18 @@ describe('Shop E2E Testing', () => {
             const phoneNumber = logInInputs["allValid"].phoneNumber;
             const password = logInInputs["allValid"].password;
 
+            // cy.intercept("POST", "http://localhost:8000/graphql").as("login");
             cy.login(phoneNumber, password, (body) => {
                 expect(body.data?.login).to.not.eq(null);
-                cy.storeToLocalStorage(body?.data?.login.token)
+                // cy.wait("@login").then(() => {
+                //     cy.storeToLocalStorage(body?.data?.login.token);
+                // });
             });
         });
+    });
+
+    it('Check login', () => {
+        expect(localStorage.getItem('store')).to.not.eq(null);
     });
 
     it('create shop from DOM', () => {
@@ -81,7 +88,7 @@ describe('Shop E2E Testing', () => {
         });
     });
 
-    it.skip('create company with invalid phone number', () => {
+    it('create company with invalid phone number', () => {
 
         const name = inputs["inValidPhoneNumber"].name;
         const description = inputs["inValidPhoneNumber"].description;
@@ -115,11 +122,11 @@ describe('Shop E2E Testing', () => {
         }, (body) => {
             console.log(body)
             expect(body?.data?.createCompany).to.eq(null);
-            expect(body?.errors[0].message).to.eq("");
+            expect(body?.errors[0].message).to.eq("Company validation failed: name: A Company must have a name");
         });
     });
 
-    it.skip('create company with empty phone', () => {
+    it('create company with empty phone', () => {
 
         const name = inputs["emptyPhone"].name;
         const description = inputs["emptyPhone"].description;
@@ -182,17 +189,17 @@ describe('Shop E2E Testing', () => {
 
     it("check get company by a invalid id field", () => {
         const id = "507f1f77bcf86cd799439011";
-        cy.intercept('POST', 'http://localhost:8000/graphql').as('invalid-field')
+        cy.intercept('POST', 'http://localhost:8000/graphql').as('invalid-field1')
         cy.visit('http://localhost:3000/shop/search');
 
         cy.get('[data-cy=shop-id-search-input]').type(id);
         cy.get('[data-cy=shop-id-search-button]').click();
-        cy.wait("@invalid-field").then(() => {
+        cy.wait("@invalid-field1").then(() => {
             cy.get('[data-cy=shop-id-search-result]').should("not.exist");
         });
     });
 
-    it.skip("check get company by a empty id field", () => {
+    it("check get company by a empty id field", () => {
         const id = "";
 
         cy.visit('http://localhost:3000/shop/search');
@@ -213,7 +220,7 @@ describe('Shop E2E Testing', () => {
         });
     });
 
-    it.skip('delete all shop', () => {
+    it('delete all shop', () => {
         cy.intercept('POST', 'http://localhost:8000/graphql').as('shop-list-all')
         cy.visit('http://localhost:3000/shop/list');
         cy.wait("@shop-list-all").then(() => {

@@ -46,6 +46,8 @@ Cypress.Commands.add('login', (phoneNumber, password, caller) => {
     }).then(response => {
         const data = response.body;
         console.log(data)
+        localStorage.setItem("store", JSON.stringify({token: data?.data?.login?.token}));
+        localStorage.setItem("roles", JSON.stringify(["ADMIN"]));
         caller(data)
     });
 })
@@ -54,6 +56,7 @@ Cypress.Commands.add('login', (phoneNumber, password, caller) => {
 Cypress.Commands.add('storeToLocalStorage', (token) => {
     console.log(token)
     localStorage.setItem("store", JSON.stringify({token}));
+    localStorage.setItem("roles", JSON.stringify(["ADMIN"]));
 })
 
 Cypress.Commands.add('removeFromLocalStorage', () => {
@@ -96,7 +99,7 @@ Cypress.Commands.add('createShop', ({
                                         name, description, city, subCity, addressName, tinNumber, phoneNumber
                                     }, caller) => {
 
-    const CREATE_USER = `
+    const CREATE_COMPANY = `
       mutation Mutation($input: CompanyCreateInput!) {
         createCompany(input: $input) {
           id
@@ -129,10 +132,11 @@ Cypress.Commands.add('createShop', ({
         url: '/',
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "authorization": `Bearer ${localStorage.getItem("store")?.token}`
         },
         body: {
-            query: CREATE_USER,
+            query: CREATE_COMPANY,
             variables: {
                 "input": {
                     "name": name,

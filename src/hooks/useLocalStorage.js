@@ -14,6 +14,7 @@ const useLocalStorage = (key, initialValue) => {
     });
     const saveData = (newData) => {
         localStorage.setItem(key, JSON.stringify({token: newData}));
+        localStorage.setItem("roles", JSON.stringify(["ADMIN"]));
         setData({token: newData});
     };
     return [data, saveData];
