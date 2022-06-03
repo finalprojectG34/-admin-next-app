@@ -12,13 +12,14 @@ import { GET_ONE_USER } from '../../apollo/queries/user_queries'
 import { useQuery, useMutation } from '@apollo/client'
 import { InputField } from '../input/InputField'
 import { UPDATE_USER } from '../../apollo/mutations/user_mutation'
+import Loader from '../Loader'
 
 const UserUpdate = ({ handleClose, open, data }) => {
   // const { data, loading } = useQuery(GET_ONE_USER, {
   //   variables: { getUserByIdId: id },
   // })
-  if (!data) {
-    return
+  if (loading) {
+    return <Loader />
   }
 
   const [firstName, setFirstName] = useState(data.firstName || '')
