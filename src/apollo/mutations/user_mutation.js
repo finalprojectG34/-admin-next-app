@@ -1,4 +1,4 @@
-import {gql} from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const CREATE_USER = gql`
   mutation Mutation($input: UserCreateInput!) {
@@ -11,11 +11,11 @@ export const CREATE_USER = gql`
       email
     }
   }
-`;
+`
 
 export const UPDATE_USER = gql`
-  mutation ($input: UserInput!) {
-    updateUser(input: $input) {
+  mutation ($input: UserUpdateInput!, $updateUserId: String) {
+    updateUser(input: $input, id: $updateUserId) {
       id
       firstName
       lastName
@@ -23,7 +23,7 @@ export const UPDATE_USER = gql`
       phone
     }
   }
-`;
+`
 
 export const DELETE_USER = gql`
   mutation ($deleteUserId: String!) {
@@ -35,7 +35,7 @@ export const DELETE_USER = gql`
       phone
     }
   }
-`;
+`
 
 export const SIGN_UP = gql`
   mutation Mutation($token: PhoneSignupInput) {
@@ -51,7 +51,7 @@ export const SIGN_UP = gql`
       token
     }
   }
-`;
+`
 
 export const SIGN_IN = gql`
   mutation Login($input: loginInput!) {
@@ -67,4 +67,4 @@ export const SIGN_IN = gql`
       token
     }
   }
-`;
+`
