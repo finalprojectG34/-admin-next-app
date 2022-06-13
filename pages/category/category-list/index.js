@@ -1,14 +1,14 @@
 import NavigationDrawer from "../../../src/ui-components/navigation";
 import CategoryList from "./category-list";
-import ProtectedRoute from "../../../src/ui-components/protected-route/protected-route";
+// import ProtectedRoute from "../../../src/ui-components/protected-route/protected-route";
 
 const CategoryListPage = () => {
     return (
-        <ProtectedRoute>
+        // <ProtectedRoute>
             <NavigationDrawer>
                 <CategoryList/>
             </NavigationDrawer>
-        </ProtectedRoute>
+        // </ProtectedRoute>
     );
 };
 

@@ -1,6 +1,6 @@
 {
     "allValid": {
-        "firstName": "Bereket",
+        "firstName": "Nathnael",
         "lastName": "Zemed",
         "phoneNumber": "+251900000000",
         "password": "password",
@@ -8,23 +8,23 @@
         "verificationCode": "000000"
     },
     "inValidPhoneNumber": {
-        "firstName": "Bereket",
-        "lastName": "Zemed",
+        "firstName": "Biruk",
+        "lastName": "Belay",
         "phoneNumber": "+25190000d",
         "password": "password",
         "email": "email@gmail.com",
         "verificationCode": "000000"
     },
     "invalidPassword": {
-        "firstName": "Bereket",
-        "lastName": "Zemed",
+        "firstName": "Moti",
+        "lastName": "Dinsa",
         "phoneNumber": "+251900000000",
         "password": "pas",
         "email": "email@gmail.com",
         "verificationCode": "000000"
     },
     "invalidFullName": {
-        "firstName": "Bereket@",
+        "firstName": "Yoni@",
         "lastName": "Ze12",
         "phoneNumber": "+251900000000",
         "password": "password",
