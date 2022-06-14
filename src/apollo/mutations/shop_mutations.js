@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const CREATE_COMPANY = gql`
   mutation Mutation($input: CompanyCreateInput!) {
@@ -8,7 +8,6 @@ export const CREATE_COMPANY = gql`
       ownerId
       address {
         location {
-          type
           coordinates
         }
         subCity
@@ -27,7 +26,7 @@ export const CREATE_COMPANY = gql`
       status
     }
   }
-`;
+`
 
 export const DELETE_COMPANY = gql`
   mutation Mutation($deleteCompanyId: ID!) {
@@ -35,4 +34,4 @@ export const DELETE_COMPANY = gql`
       id
     }
   }
-`;
+`

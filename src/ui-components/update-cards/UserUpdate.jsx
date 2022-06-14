@@ -18,13 +18,14 @@ const UserUpdate = ({ handleClose, open, data }) => {
   // const { data, loading } = useQuery(GET_ONE_USER, {
   //   variables: { getUserByIdId: id },
   // })
-  if (loading) {
+  if (!data) {
     return <Loader />
   }
 
   const [firstName, setFirstName] = useState(data.firstName || '')
   const [lastName, setLastName] = useState(data.lastName || '')
   const [phone, setPhone] = useState(data.phone || '')
+  const [email, setEmail] = useState(data.email || '')
   const [updateUser] = useMutation(UPDATE_USER)
 
   const update = () => {

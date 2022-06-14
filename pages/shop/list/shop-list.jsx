@@ -34,7 +34,7 @@ const CompanyList = () => {
   if (loading) return <Loader />
   return (
     <MainCard
-      title='Company List'
+      title='Shop List'
       sx={{ margin: 'auto' }}
       style={{ maxWidth: 'max-content' }}
     >

@@ -1,5 +1,5 @@
-import {useState} from 'react';
-import {useLazyQuery} from '@apollo/client';
+import { useState } from 'react'
+import { useLazyQuery } from '@apollo/client'
 
 import {
   Alert,
@@ -13,115 +13,106 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Typography
-} from '@mui/material';
+  Typography,
+} from '@mui/material'
 
-import MainCard from '../../../src/ui-components/cards/MainCard';
-import Loader from "../../../src/ui-components/Loader";
+import MainCard from '../../../src/ui-components/cards/MainCard'
+import Loader from '../../../src/ui-components/Loader'
 
-import {GET_ONE_USER} from "../../../src/apollo/queries/user_queries";
-
+import {
+  GET_ONE_USER,
+  SEARCH_USER,
+} from '../../../src/apollo/queries/user_queries'
 
 const UserSearch = () => {
-    const [getUser, {data, error, loading}] = useLazyQuery(GET_ONE_USER);
-    const [value, setValue] = useState('id');
-    const [text, setText] = useState('');
+  const [searchByFirstName, { data, error, loading }] =
+    useLazyQuery(SEARCH_USER)
+  //   const [value, setValue] = useState('id')
+  const [text, setText] = useState('')
 
-    const handleChange = event => {
-        setValue(event.target.value);
-    };
-    if (error)
-        return (
-            <Alert variant='outlined' severity='error'>
-                {error.message}
-            </Alert>
-        );
-    if (loading) return <Loader/>;
+  const handleChange = (event) => {
+    setText(event.target.value)
+  }
+  if (error)
     return (
-        <MainCard title='Search User'>
-            <Typography variant='body2' component="div">
-                <Box mb={4}>
-                    <FormControl component='fieldset'>
-                        <FormLabel component='legend'>Search By</FormLabel>
-                        <RadioGroup
-                            aria-label='Search By'
-                            defaultValue='id'
-                            name='radio-buttons-group'
-                            value={value}
-                            onChange={handleChange}
-                        >
-                            <FormControlLabel value='id' control={<Radio/>} label='Id'/>
-                            <FormControlLabel
-                                value='firstName'
-                                control={<Radio/>}
-                                label='First Name'
-                            />
-                        </RadioGroup>
-                    </FormControl>
-                    <Box sx={{display: 'flex'}}>
-                        <TextField
-                            label={value}
-                            variant='outlined'
-                            value={text}
-                            onChange={e => setText(e.target.value)}
-                            sx={{mr: 2}}
-                            data-cy='user-id-search-input'
-                        />
+      <Alert variant='outlined' severity='error'>
+        {error.message}
+      </Alert>
+    )
+  if (loading) return <Loader />
+  return (
+    <MainCard title='Search User'>
+      <Typography variant='body2' component='div'>
+        <Box mb={4}>
+          <FormControl component='fieldset'>
+            <FormLabel component='legend'>Search By</FormLabel>
+            {/* <RadioGroup
+              aria-label='Search By'
+              defaultValue='id'
+              name='radio-buttons-group'
+              value={value}
+              onChange={handleChange}
+            >
+              <FormControlLabel value='id' control={<Radio />} label='Id' /> */}
+            <RadioGroup
+              aria-label='Search By'
+              defaultValue='firstName'
+              name='radio-buttons-group'
+            >
+              <FormControlLabel
+                value='firstName'
+                control={<Radio />}
+                label='First Name'
+              />
+            </RadioGroup>
+          </FormControl>
+          <Box sx={{ display: 'flex' }}>
+            <TextField
+              label='firstName'
+              variant='outlined'
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              sx={{ mr: 2 }}
+            />
 
-                        <Button
-                            variant='outlined'
-                            onClick={() => {
-                                getUser({
-                                    variables: {
-                                        getUserByIdId: text
-                                    }
-                                }).then(() => {
-                                }).catch(e => {
-                                    console.log("error=====>", e)
-                                });
-                            }}
-                            data-cy='user-id-search-button'
-                        >
-                            Search
-                        </Button>
-                    </Box>
-                </Box>
-                {data && (
-                    <Card sx={{maxWidth: 275, bgcolor: '#00000021'}}>
-                        <CardContent>
-                            {data.getUserById?.id && (
-                                <Typography sx={{fontSize: 18}} gutterBottom data-cy='user-id-search-result'>
-                                    Id: {data.getUserById.id}
-                                </Typography>
-                            )}
+            <Button
+              variant='outlined'
+              onClick={() => {
+                searchByFirstName({
+                  variables: {
+                    name: text,
+                  },
+                })
+              }}
+              data-cy='user-id-search-button'
+            >
+              Search
+            </Button>
+          </Box>
+        </Box>
+        {data &&
+          data?.searchUserByName.map((searchData) => (
+            <Card
+              key={searchData.id}
+              sx={{ maxWidth: 275, bgcolor: '#00000021', marginBottom: '15px' }}
+            >
+              <CardContent>
+                <Typography sx={{ fontSize: 18 }} gutterBottom>
+                  First Name: {searchData.firstName}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }}>
+                  Last Name: {searchData.lastName}
+                </Typography>
 
-                            {data.getUserById?.firstName && (
-                                <Typography sx={{fontSize: 18}} gutterBottom>
-                                    First Name: {data.getUserById.firstName}
-                                </Typography>
-                            )}
+                <Typography sx={{ mb: 1.5 }}>
+                  Phone Number: {searchData.phone}
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
+      </Typography>
+    </MainCard>
+  )
+}
 
-                            {data.getUserById?.lastName && (
-                                <Typography sx={{mb: 1.5}}>
-                                    Last Name: {data.getUserById.lastName}
-                                </Typography>
-                            )}
-                            {data.getUserById?.email && (
-                                <Typography sx={{mb: 1.5}}>
-                                    Email: {data.getUserById.email}
-                                </Typography>
-                            )}
-                            {data.getUserById?.phone && (
-                                <Typography sx={{mb: 1.5}}>
-                                    Phone Number: {data.getUserById.phone}
-                                </Typography>
-                            )}
-                        </CardContent>
-                    </Card>
-                )}
-            </Typography>
-        </MainCard>
-    );
-};
-
-export default UserSearch;
+export default UserSearch

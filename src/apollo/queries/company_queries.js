@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const GET_ALL_COMPANY = gql`
   query GetAllCompanies {
@@ -10,7 +10,6 @@ export const GET_ALL_COMPANY = gql`
       address {
         location {
           coordinates
-          type
         }
         subCity
         city
@@ -28,58 +27,10 @@ export const GET_ALL_COMPANY = gql`
         suffix
         imagePath
       }
-      sellingCategories {
-        id
-        slug
-        name
-        poster
-        path
-        parentId
-        parentsPath
-        subCategories {
-          subCategories {
-            id
-            slug
-            name
-            path
-            parentId
-            poster
-            parentsPath
-            subCategories {
-              id
-              slug
-              name
-              poster
-              path
-              parentId
-              parentsPath
-              count
-              facets
-              description
-            }
-            count
-            facets
-            description
-          }
-          id
-          slug
-          path
-          parentId
-          name
-          poster
-          parentsPath
-          facets
-          count
-          description
-        }
-        count
-        facets
-        description
-      }
       count
     }
   }
-`;
+`
 
 export const GET_ONE_COMPANY = gql`
   query GetOneCompany($getOneCompanyId: String!) {
@@ -91,4 +42,4 @@ export const GET_ONE_COMPANY = gql`
       phoneNumber
     }
   }
-`;
+`
