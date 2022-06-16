@@ -1,21 +1,28 @@
 import * as React from 'react'
 import { styled, useTheme } from '@mui/material/styles'
-import Box from '@mui/material/Box'
-import MuiDrawer from '@mui/material/Drawer'
+
+import {
+  Box,
+  Toolbar,
+  List,
+  CssBaseline,
+  Typography,
+  Divider,
+  Stack,
+  IconButton,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListItemButton,
+  Button,
+} from '@mui/material'
+
 import MuiAppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-import List from '@mui/material/List'
-import CssBaseline from '@mui/material/CssBaseline'
-import Typography from '@mui/material/Typography'
-import Divider from '@mui/material/Divider'
-import IconButton from '@mui/material/IconButton'
+import MuiDrawer from '@mui/material/Drawer'
+
 import MenuIcon from '@mui/icons-material/Menu'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
 import InboxIcon from '@mui/icons-material/MoveToInbox'
 import MailIcon from '@mui/icons-material/Mail'
 import {
@@ -31,6 +38,9 @@ import {
 } from '@mui/icons-material'
 
 import Link from 'next/link'
+import { Logout } from '../logout'
+import { useRouter } from 'next/router'
+import fbConfig from '../../firebase/fb-config'
 
 const drawerWidth = 240
 
@@ -102,6 +112,7 @@ const Drawer = styled(MuiDrawer, {
 export default function NavigationDrawer(props) {
   const theme = useTheme()
   const [open, setOpen] = React.useState(false)
+  const router = useRouter()
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -111,6 +122,21 @@ export default function NavigationDrawer(props) {
     setOpen(false)
   }
 
+  const handleLogout = () => {
+    // Logout()
+    localStorage.clear()
+
+    fbConfig
+      .signOut(fbConfig.auth)
+      .then(() => {
+        console.log('sign out success')
+      })
+      .catch((e) => {
+        console.log('sign out error', e)
+      })
+    router.push('/')
+    console.log('logging out')
+  }
   const userOptions = [
     {
       text: 'Create User',
@@ -182,16 +208,31 @@ export default function NavigationDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            color={theme.palette.secondary.light}
-            gutterBottom
-            variant='h3'
-            noWrap
-            component='div'
-            margin='unset'
+          <Stack
+            direction={'row'}
+            justifyContent='space-between'
+            width={'100%'}
+            alignItems='center'
           >
-            Admin Panel.
-          </Typography>
+            <Typography
+              color={theme.palette.secondary.light}
+              gutterBottom
+              variant='h3'
+              noWrap
+              component='div'
+              margin='unset'
+            >
+              Admin Panel.
+            </Typography>
+            <Button
+              variant='text'
+              size='large'
+              sx={{ color: `${theme.palette.secondary.light}` }}
+              onClick={() => handleLogout()}
+            >
+              Logout
+            </Button>
+          </Stack>
         </Toolbar>
       </AppBar>
       <Drawer variant='permanent' open={open}>

@@ -8,6 +8,7 @@ export const GET_ALL_USERS = gql`
       lastName
       email
       phone
+      role
     }
   }
 `
@@ -20,6 +21,7 @@ export const GET_ONE_USER = gql`
       lastName
       email
       phone
+      role
     }
   }
 `
@@ -32,6 +34,7 @@ export const SEARCH_USER = gql`
       lastName
       phone
       email
+      role
     }
   }
 `

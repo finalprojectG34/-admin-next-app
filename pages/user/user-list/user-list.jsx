@@ -28,7 +28,7 @@ import { useEffect, useState } from 'react'
 import UserUpdate from '../../../src/ui-components/update-cards/UserUpdate'
 
 const UserList = () => {
-  const { data, error, loading } = useQuery(GET_ALL_USERS)
+  const { data, error, loading, refetch } = useQuery(GET_ALL_USERS)
 
   const [deleteUser] = useMutation(DELETE_USER)
 
@@ -40,9 +40,6 @@ const UserList = () => {
   const { data: getOneUserData } = useQuery(GET_ONE_USER, {
     variables: { getUserByIdId: currentUserId },
   })
-
-  console.log('Pages: ', page)
-  console.log('rows per page: ', rowsPerPage)
 
   const setUserUpdate = (id) => {
     setOpen(true)
@@ -76,6 +73,7 @@ const UserList = () => {
           handleClose={setOpen}
           open={open}
           data={getOneUserData?.getUserById}
+          refetch={refetch}
         />
       )}
       <Typography variant='body2' component='div'>
@@ -87,6 +85,7 @@ const UserList = () => {
                 <TableCell align='right'>First Name</TableCell>
                 <TableCell align='right'>Last Name</TableCell>
                 <TableCell align='right'>Phone Number</TableCell>
+                <TableCell align='right'>Role</TableCell>
                 <TableCell align='right'>Delete</TableCell>
                 <TableCell align='right'>Edit</TableCell>
               </TableRow>
@@ -113,6 +112,7 @@ const UserList = () => {
                     <TableCell align='right'>{user.firstName}</TableCell>
                     <TableCell align='right'>{user.lastName}</TableCell>
                     <TableCell align='right'>{user.phone}</TableCell>
+                    <TableCell align='right'>{user.role}</TableCell>
                     <TableCell align='right'>
                       <HighlightOffOutlined
                         data-cy='user-delete-element'
