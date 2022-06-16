@@ -7,7 +7,7 @@ const cache = new InMemoryCache()
 const httpLink = createHttpLink({
   // uri: 'https://finalproject34.herokuapp.com/graphql'
   //   uri: 'http://localhost:8000/graphql',
-  uri: 'http://192.168.0.167:8000/graphql',
+  uri: 'http://192.168.0.196:8000/graphql',
 })
 
 const authLink = setContext(async (_, { headers }) => {

@@ -47,12 +47,6 @@ const UserCreate = () => {
           role,
         },
       },
-      update: (cache, item) => {
-        // console.log(cache.evict({id}))
-        console.log(item.data?.createUser.id)
-        console.log(data?.createUser.id)
-        cache.evict({ id: item.data?.createUser.id })
-      },
     })
     // .then((data) => {
     //   router.push('/user/user-list')

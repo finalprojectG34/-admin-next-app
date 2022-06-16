@@ -10,6 +10,8 @@ import {
   TableHead,
   TableRow,
   Typography,
+  TableFooter,
+  TablePagination,
 } from '@mui/material'
 import { HighlightOffOutlined, CachedOutlined } from '@mui/icons-material'
 
@@ -32,8 +34,10 @@ const UserList = () => {
 
   const [deleteUser] = useMutation(DELETE_USER)
 
-  const [open, setOpen] = useState(false)
   const [currentUserId, setCurrentUserId] = useState('')
+  const [open, setOpen] = useState(false)
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
 
   const { data: getOneUserData } = useQuery(GET_ONE_USER, {
     variables: { getUserByIdId: currentUserId },
@@ -48,6 +52,15 @@ const UserList = () => {
   const setUserUpdate = (id) => {
     setOpen(true)
     setCurrentUserId(id)
+  }
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
   }
 
   if (error)
@@ -84,7 +97,13 @@ const UserList = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data?.getAllUsers?.map((user, index) =>
+              {(rowsPerPage > 0
+                ? data?.getAllUsers?.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : data?.getAllUsers
+              ).map((user, index) =>
                 !user ? null : (
                   <TableRow
                     key={user.id}
@@ -119,17 +138,6 @@ const UserList = () => {
                       <CachedOutlined
                         data-cy='user-edit-element'
                         onClick={() => setUserUpdate(user.id)}
-                        // onClick={() =>
-                        //     {
-                        //   updateUser({
-                        //     variables: {
-                        //       deleteUserId: user.id,
-                        //     },
-                        //     update: (cache) => {
-                        //       cache.evict({ id: 'User:' + user.id })
-                        //     },
-                        //   }).then(() => {})
-                        // }}
                         color='success'
                         sx={{ cursor: 'pointer' }}
                         fontSize='small'
@@ -139,6 +147,19 @@ const UserList = () => {
                 )
               )}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                  colSpan={3}
+                  count={data?.getAllUsers?.length || 0}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </TableContainer>
       </Typography>
