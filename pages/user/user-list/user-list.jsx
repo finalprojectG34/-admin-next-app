@@ -28,9 +28,7 @@ import { useEffect, useState } from 'react'
 import UserUpdate from '../../../src/ui-components/update-cards/UserUpdate'
 
 const UserList = () => {
-  const [getUsers, { data, error, loading }] = useLazyQuery(GET_ALL_USERS, {
-    nextFetchPolicy: 'network-only',
-  })
+  const { data, error, loading } = useQuery(GET_ALL_USERS)
 
   const [deleteUser] = useMutation(DELETE_USER)
 
@@ -43,11 +41,8 @@ const UserList = () => {
     variables: { getUserByIdId: currentUserId },
   })
 
-  useEffect(() => {
-    getUsers().then((d) => {
-      console.log(d)
-    })
-  }, [])
+  console.log('Pages: ', page)
+  console.log('rows per page: ', rowsPerPage)
 
   const setUserUpdate = (id) => {
     setOpen(true)
@@ -98,13 +93,15 @@ const UserList = () => {
             </TableHead>
             <TableBody>
               {(rowsPerPage > 0
-                ? data?.getAllUsers?.slice(
+                ? data?.getAllUsers.slice(
                     page * rowsPerPage,
                     page * rowsPerPage + rowsPerPage
                   )
                 : data?.getAllUsers
               ).map((user, index) =>
-                !user ? null : (
+                !user ? (
+                  <Loader />
+                ) : (
                   <TableRow
                     key={user.id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -152,7 +149,7 @@ const UserList = () => {
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                   colSpan={3}
-                  count={data?.getAllUsers?.length || 0}
+                  count={data?.getAllUsers.length || 0}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}

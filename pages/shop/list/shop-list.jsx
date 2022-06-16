@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client'
+import { useState } from 'react'
 
 import {
   Alert,
@@ -10,6 +11,8 @@ import {
   TableHead,
   TableRow,
   Typography,
+  TableFooter,
+  TablePagination,
 } from '@mui/material'
 import { HighlightOffOutlined } from '@mui/icons-material'
 
@@ -22,8 +25,17 @@ import { DELETE_COMPANY } from '../../../src/apollo/mutations/shop_mutations'
 const CompanyList = () => {
   const { data, error, loading } = useQuery(GET_ALL_COMPANY)
   const [deleteCompany] = useMutation(DELETE_COMPANY)
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
 
-  console.log(data)
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
 
   if (error)
     return (
@@ -52,7 +64,13 @@ const CompanyList = () => {
               </TableRow>
             </TableHead>
             <TableBody data-cy='category-list'>
-              {data?.getAllCompanies?.map((company, index) =>
+              {(rowsPerPage > 0
+                ? data?.getAllCompanies?.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : data?.getAllCompanies
+              ).map((company, index) =>
                 !company ? null : (
                   <TableRow
                     key={company.id}
@@ -89,6 +107,19 @@ const CompanyList = () => {
                 )
               )}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                  colSpan={3}
+                  count={data?.getAllCompanies?.length || 0}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </TableContainer>
       </Typography>
