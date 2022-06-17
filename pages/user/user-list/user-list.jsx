@@ -68,7 +68,7 @@ const UserList = () => {
       sx={{ margin: 'auto' }}
       style={{ maxWidth: 'max-content' }}
     >
-      {open && (
+      {open && getOneUserData?.getUserById && (
         <UserUpdate
           handleClose={setOpen}
           open={open}
@@ -115,7 +115,6 @@ const UserList = () => {
                     <TableCell align='right'>{user.role}</TableCell>
                     <TableCell align='right'>
                       <HighlightOffOutlined
-                        data-cy='user-delete-element'
                         onClick={() => {
                           deleteUser({
                             variables: {
@@ -133,7 +132,6 @@ const UserList = () => {
                     </TableCell>
                     <TableCell align='right'>
                       <CachedOutlined
-                        data-cy='user-edit-element'
                         onClick={() => setUserUpdate(user.id)}
                         color='success'
                         sx={{ cursor: 'pointer' }}

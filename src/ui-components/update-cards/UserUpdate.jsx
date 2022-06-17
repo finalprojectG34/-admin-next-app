@@ -23,10 +23,6 @@ const UserUpdate = ({ handleClose, open, data, refetch }) => {
   //   variables: { getUserByIdId: id },
   // })
 
-  if (!data) {
-    return <Loader />
-  }
-
   const [firstName, setFirstName] = useState(data?.firstName || '')
   const [lastName, setLastName] = useState(data?.lastName || '')
   const [phone, setPhone] = useState(data?.phone || '')
@@ -78,7 +74,7 @@ const UserUpdate = ({ handleClose, open, data, refetch }) => {
           <Select
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            label='Age'
+            label='role'
           >
             {ROLE.map((role, index) => (
               <MenuItem key={index} value={role}>

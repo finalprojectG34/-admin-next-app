@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
 
+import { CachedOutlined, HighlightOffOutlined } from '@mui/icons-material'
 import {
   Alert,
   Paper,
@@ -8,25 +9,35 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
+  TablePagination,
   TableRow,
   Typography,
-  TableFooter,
-  TablePagination,
 } from '@mui/material'
-import { HighlightOffOutlined } from '@mui/icons-material'
 
 import MainCard from '../../../src/ui-components/cards/MainCard'
 import Loader from '../../../src/ui-components/Loader'
 
-import { GET_ALL_COMPANY } from '../../../src/apollo/queries/company_queries'
 import { DELETE_COMPANY } from '../../../src/apollo/mutations/shop_mutations'
+import {
+  GET_ALL_COMPANY,
+  GET_ONE_COMPANY,
+} from '../../../src/apollo/queries/company_queries'
+import CompanyUpdate from '../../../src/ui-components/update-cards/CompanyUpdate'
 
 const CompanyList = () => {
-  const { data, error, loading } = useQuery(GET_ALL_COMPANY)
+  const { data, error, loading, refetch } = useQuery(GET_ALL_COMPANY)
   const [deleteCompany] = useMutation(DELETE_COMPANY)
+  const [currentUserId, setCurrentUserId] = useState('')
+
+  const [open, setOpen] = useState(false)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
+
+  const { data: getOneCompany } = useQuery(GET_ONE_COMPANY, {
+    variables: { getOneCompanyId: currentUserId },
+  })
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
@@ -36,6 +47,14 @@ const CompanyList = () => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
+
+  const setCompanyUpdate = (id) => {
+    console.log('id: ', id)
+    setOpen(true)
+    setCurrentUserId(id)
+  }
+
+  console.log('single company: ', getOneCompany)
 
   if (error)
     return (
@@ -50,6 +69,14 @@ const CompanyList = () => {
       sx={{ margin: 'auto' }}
       style={{ maxWidth: 'max-content' }}
     >
+      {open && getOneCompany?.getOneCompany && (
+        <CompanyUpdate
+          handleClose={setOpen}
+          open={open}
+          data={getOneCompany?.getOneCompany}
+          refetch={refetch}
+        />
+      )}
       <Typography variant='body2' component='div'>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650, bgcolor: '#00000021' }}>
@@ -60,7 +87,9 @@ const CompanyList = () => {
                 <TableCell align='center'>Description</TableCell>
                 <TableCell align='center'>Address</TableCell>
                 <TableCell align='center'>Tin Number</TableCell>
+                <TableCell align='center'>Status</TableCell>
                 <TableCell align='center'>Delete</TableCell>
+                <TableCell align='right'>Edit</TableCell>
               </TableRow>
             </TableHead>
             <TableBody data-cy='category-list'>
@@ -82,10 +111,12 @@ const CompanyList = () => {
                     </TableCell>
                     <TableCell align='left'>{company.name}</TableCell>
                     <TableCell align='left'>{company.description}</TableCell>
-                    <TableCell align='left'>{company.tinNumber}</TableCell>
                     <TableCell align='center'>
                       {`${company.address.city}, ${company.address.subCity}, ${company.address.addressName}`}
                     </TableCell>
+                    <TableCell align='left'>{company.tinNumber}</TableCell>
+                    <TableCell align='left'>{company.status}</TableCell>
+
                     <TableCell align='right'>
                       <HighlightOffOutlined
                         data-cy='shop-delete-element'
@@ -101,6 +132,14 @@ const CompanyList = () => {
                             },
                           }).then(() => {})
                         }}
+                      />
+                    </TableCell>
+                    <TableCell align='right'>
+                      <CachedOutlined
+                        onClick={() => setCompanyUpdate(company.id)}
+                        color='success'
+                        sx={{ cursor: 'pointer' }}
+                        fontSize='small'
                       />
                     </TableCell>
                   </TableRow>

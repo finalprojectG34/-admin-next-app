@@ -40,6 +40,12 @@ export const GET_ONE_COMPANY = gql`
       description
       tinNumber
       phoneNumber
+      status
+      address {
+        subCity
+        city
+        addressName
+      }
     }
   }
 `
