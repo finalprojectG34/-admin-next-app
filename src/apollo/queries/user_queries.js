@@ -38,3 +38,37 @@ export const SEARCH_USER = gql`
     }
   }
 `
+
+export const CURRENT_USER = gql`
+  query GetMe {
+    getMe {
+      id
+      firstName
+      lastName
+      phone
+      role
+      shopId
+      email
+      carts
+      roles
+      shopIds
+      fullName
+      address {
+        location {
+          coordinates
+        }
+        subCity
+        city
+        addressName
+        country
+      }
+      image {
+        images
+        bgImage
+        imageCover
+        suffix
+        imagePath
+      }
+    }
+  }
+`

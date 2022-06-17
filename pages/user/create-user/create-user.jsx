@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-import { useRouter } from 'next/router'
 import { useMutation } from '@apollo/client'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 
+import { LoadingButton } from '@mui/lab'
 import {
   Box,
   FormControl,
@@ -11,13 +12,12 @@ import {
   Select,
   Typography,
 } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
 
 import MainCard from '../../../src/ui-components/cards/MainCard'
 import { InputField } from '../../../src/ui-components/input/InputField'
 
-import AnimateButton from '../../../src/ui-components/extended/AnimateButton'
 import { CREATE_USER } from '../../../src/apollo/mutations/user_mutation'
+import AnimateButton from '../../../src/ui-components/extended/AnimateButton'
 
 const UserCreate = () => {
   const router = useRouter()
@@ -32,12 +32,7 @@ const UserCreate = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log({
-      firstName,
-      lastName,
-      phone,
-      role,
-    })
+
     createUser({
       variables: {
         input: {

@@ -105,16 +105,22 @@ const CompanyList = () => {
                     key={company.id}
                     sx={{
                       '&:last-child td, &:last-child th': { border: 0 },
-                      cursor: 'pointer',
                     }}
-                    onClick={() =>
-                      router.push(`${router.pathname}/${company.id}`)
-                    }
                   >
                     <TableCell component='th' scope='row'>
                       {index + 1}
                     </TableCell>
-                    <TableCell align='left'>{company.name}</TableCell>
+                    <TableCell
+                      align='left'
+                      sx={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={() =>
+                        router.push(`${router.pathname}/${company.id}`)
+                      }
+                    >
+                      {company.name}
+                    </TableCell>
                     <TableCell align='left'>{company.description}</TableCell>
                     <TableCell align='center'>
                       {`${company.address.city}, ${company.address.subCity}, ${company.address.addressName}`}

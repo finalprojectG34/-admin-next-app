@@ -42,3 +42,11 @@ export const UPDATE_COMPANY = gql`
     }
   }
 `
+
+export const UPDATE_COMPANY_STATUS = gql`
+  mutation ($updateCompanyStatusId: String, $input: AdminUpdateShopStatus) {
+    updateCompanyStatus(id: $updateCompanyStatusId, input: $input) {
+      id
+    }
+  }
+`
