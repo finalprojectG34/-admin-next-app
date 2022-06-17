@@ -25,6 +25,7 @@ import {
   GET_ONE_COMPANY,
 } from '../../../src/apollo/queries/company_queries'
 import CompanyUpdate from '../../../src/ui-components/update-cards/CompanyUpdate'
+import { useRouter } from 'next/router'
 
 const CompanyList = () => {
   const { data, error, loading, refetch } = useQuery(GET_ALL_COMPANY)
@@ -39,6 +40,8 @@ const CompanyList = () => {
     variables: { getOneCompanyId: currentUserId },
   })
 
+  const router = useRouter()
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
@@ -49,12 +52,9 @@ const CompanyList = () => {
   }
 
   const setCompanyUpdate = (id) => {
-    console.log('id: ', id)
     setOpen(true)
     setCurrentUserId(id)
   }
-
-  console.log('single company: ', getOneCompany)
 
   if (error)
     return (
@@ -103,8 +103,13 @@ const CompanyList = () => {
                 !company ? null : (
                   <TableRow
                     key={company.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    data-cy='shop-list-element'
+                    sx={{
+                      '&:last-child td, &:last-child th': { border: 0 },
+                      cursor: 'pointer',
+                    }}
+                    onClick={() =>
+                      router.push(`${router.pathname}/${company.id}`)
+                    }
                   >
                     <TableCell component='th' scope='row'>
                       {index + 1}

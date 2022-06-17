@@ -36,16 +36,33 @@ export const GET_ONE_COMPANY = gql`
   query GetOneCompany($getOneCompanyId: String!) {
     getOneCompany(id: $getOneCompanyId) {
       id
+      slug
       name
       description
-      tinNumber
       phoneNumber
-      status
+      tinNumber
       address {
+        location {
+          coordinates
+        }
         subCity
         city
         addressName
+        country
       }
+      image {
+        images
+        bgImage
+        imageCover
+        suffix
+        imagePath
+      }
+      poster
+      ownerId
+      haveLicense
+      status
+      sellingCategories
+      count
     }
   }
 `
