@@ -50,3 +50,10 @@ export const UPDATE_COMPANY_STATUS = gql`
     }
   }
 `
+export const UPDATE_COMPANY_OWNER = gql`
+  mutation Mutation($input: CompanyOwnerUpdateInput!) {
+    updateCompanyOwner(input: $input) {
+      id
+    }
+  }
+`

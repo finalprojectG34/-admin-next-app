@@ -26,7 +26,10 @@ import {
   SEARCH_USER,
 } from '../../../src/apollo/queries/user_queries'
 import Loader from '../../../src/ui-components/Loader'
-import { UPDATE_COMPANY_STATUS } from '../../../src/apollo/mutations/shop_mutations'
+import {
+  UPDATE_COMPANY_OWNER,
+  UPDATE_COMPANY_STATUS,
+} from '../../../src/apollo/mutations/shop_mutations'
 
 const CompanyStatus = () => {
   const router = useRouter()
@@ -38,6 +41,8 @@ const CompanyStatus = () => {
     searchByFirstName,
     { data: searchData, error, loading: searchLoading },
   ] = useLazyQuery(SEARCH_USER)
+
+  const [updateShopOwner] = useMutation(UPDATE_COMPANY_OWNER)
 
   const { data: meData } = useQuery(CURRENT_USER)
 
@@ -60,7 +65,7 @@ const CompanyStatus = () => {
       variables: {
         updateCompanyStatusId: data?.getOneCompany.id,
         input: {
-          userId: meData?.getMe.id,
+          userId: data?.getOneCompany.ownerId,
           status: updateStatus,
           haveLicense: true,
         },
@@ -71,8 +76,19 @@ const CompanyStatus = () => {
     })
   }
 
+  const handleUpdateOwner = (updateOwnerId) => {
+    updateShopOwner({
+      variables: {
+        input: { ownerId: updateOwnerId, id: data?.getOneCompany.id },
+      },
+    }).then(() => {
+      refetch()
+    })
+  }
+
   const STATUS = ['Pending', 'Verified', 'Rejected', 'Blocked']
   const {
+    ownerId,
     description,
     name,
     phoneNumber,
@@ -105,6 +121,7 @@ const CompanyStatus = () => {
               ))}
             </Select>
           </FormControl>
+
           <Button variant='contained' fullWidth onClick={handleUpdateStatus}>
             Update
           </Button>
@@ -151,9 +168,11 @@ const CompanyStatus = () => {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button onClick={() => setToggle(true)} variant='contained'>
-                    Update Status
-                  </Button>
+                  {data?.getOneCompany.ownerId && (
+                    <Button onClick={() => setToggle(true)} variant='contained'>
+                      Update Status
+                    </Button>
+                  )}
                 </CardActions>
               </Card>
             </Grid>
@@ -203,10 +222,12 @@ const CompanyStatus = () => {
                         </Typography>
                         <Button
                           variant='contained'
-                          sx={{
-                            backgroundColor: 'gray',
-                            ':hover': { backgroundColor: 'GrayText' },
-                          }}
+                          disabled={ownerId === data.id}
+                          onClick={() => handleUpdateOwner(data.id)}
+                          // sx={{
+                          //   backgroundColor: 'gray',
+                          //   ':hover': { backgroundColor: 'GrayText' },
+                          // }}
                         >
                           ASSIGN
                         </Button>
