@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 import { useTheme } from '@mui/material/styles'
 import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material'
 
@@ -84,9 +82,7 @@ const LoginPage = () => {
                         variant='subtitle1'
                         sx={{ textDecoration: 'none' }}
                       >
-                        <Link href='/register'>
-                          Don&apos;t have an account?
-                        </Link>
+
                       </Typography>
                     </Grid>
                   </Grid>

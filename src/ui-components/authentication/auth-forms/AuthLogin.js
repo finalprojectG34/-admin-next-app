@@ -1,21 +1,18 @@
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { useMutation } from '@apollo/client'
+import {useEffect, useState} from 'react'
+import {useRouter} from 'next/router'
+import {useMutation} from '@apollo/client'
 
 import {
-  Box,
-  Checkbox,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  Stack,
-  TextField,
-  Typography,
+    Box,
+    Divider,
+    FormControl,
+    Grid,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    OutlinedInput,
+    TextField,
+    Typography,
 } from '@mui/material'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
@@ -23,158 +20,167 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import useLocalStorage from '../../../hooks/useLocalStorage'
 import AnimateButton from '../../../ui-components/extended/AnimateButton'
 
-import { SIGN_IN } from '../../../apollo/mutations/user_mutation'
-import { LoadingButton } from '@mui/lab'
+import {SIGN_IN} from '../../../apollo/mutations/user_mutation'
+import {LoadingButton} from '@mui/lab'
 
 const FirebaseLogin = () => {
-  const router = useRouter()
+    const router = useRouter()
 
-  const [showPassword, setShowPassword] = useState(false)
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword)
-  }
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault()
-  }
-
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [password, setPassword] = useState('')
-
-  const [sessionToken, setSessionToken] = useLocalStorage('store', null)
-  const [rolesData, setRolesData] = useLocalStorage('roles', null)
-  const [signIn, { loading, error }] = useMutation(SIGN_IN)
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    signIn({
-      variables: {
-        input: {
-          info: '+251' + phoneNumber.toString().substr(phoneNumber.length - 9),
-          info_type: 'phone',
-          password: password,
-        },
-      },
-    })
-      .then((res) => {
-        setSessionToken(res.data.login.token)
-        setRolesData(['ADMIN'])
-      })
-      .catch((e) => {
-        console.log('error login', e)
-      })
-  }
-
-  useEffect(() => {
-    if (sessionToken) {
-      router.push('/')
+    const [showPassword, setShowPassword] = useState(false)
+    const handleClickShowPassword = () => {
+        setShowPassword(!showPassword)
     }
-    if (sessionToken && rolesData) {
-      if (rolesData.token.indexOf('ADMIN') === -1) {
-        router.push('/404/access-denied')
-      } else {
-        router.push('/')
-      }
+
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault()
     }
-  }, [sessionToken, rolesData])
 
-  return (
-    <>
-      <Grid container direction='column' justifyContent='center' spacing={2}>
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex',
-            }}
-          >
-            <Divider sx={{ flexGrow: 1 }} orientation='horizontal' />
-          </Box>
-        </Grid>
-      </Grid>
+    const [phoneNumber, setPhoneNumber] = useState('')
+    const [password, setPassword] = useState('')
 
-      <form onSubmit={handleSubmit}>
-        <TextField
-          fullWidth
-          label='Phone Number'
-          name='phoneNumber'
-          type='text'
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          data-cy='login-phone-input'
-        />
-        <Box style={{ margin: '30px' }} />
-        <FormControl
-          fullWidth
-          // error={Boolean(touched.password && errors.password)}
-        >
-          <InputLabel htmlFor='outlined-adornment-password-login'>
-            Password
-          </InputLabel>
-          <OutlinedInput
-            id='outlined-adornment-password-login'
-            type={showPassword ? 'text' : 'password'}
-            value={password}
-            name='password'
-            data-cy='login-password-input'
-            onChange={(e) => setPassword(e.target.value)}
-            endAdornment={
-              <InputAdornment position='end'>
-                <IconButton
-                  aria-label='toggle password visibility'
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge='end'
-                  size='large'
-                >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
+    const [sessionToken, setSessionToken] = useLocalStorage('store', null)
+    const [rolesData, setRolesData] = useLocalStorage('roles', null)
+    const [signIn, {loading, error}] = useMutation(SIGN_IN)
+    const [loginError, setLoginError] = useState('')
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        signIn({
+            variables: {
+                input: {
+                    info: '+251' + phoneNumber.toString().substr(phoneNumber.length - 9),
+                    info_type: 'phone',
+                    password: password,
+                },
+            },
+        })
+            .then((res) => {
+                if (res.data.login.role === "ADMIN") {
+                    setRolesData(['ADMIN'])
+                    setSessionToken(res.data.login.token)
+                } else {
+                    setLoginError('Access Denied')
+                }
+
+                setPhoneNumber('')
+                setPassword('')
+
+            })
+            .catch((e) => {
+                console.log('error login', e)
+            })
+    }
+
+    useEffect(() => {
+        if (sessionToken) {
+            router.push('/')
+        }
+        if (sessionToken && rolesData) {
+            if (rolesData.token.indexOf('ADMIN') === -1) {
+                router.push('/404/access-denied')
+            } else {
+                router.push('/')
             }
-            label='Password'
-            inputProps={{}}
-          />
-        </FormControl>
+        }
+    }, [sessionToken, rolesData])
 
-        <Box sx={{ mt: 2 }}>
-          <AnimateButton>
-            <LoadingButton
-              disableElevation
-              disabled={loading}
-              fullWidth
-              size='large'
-              type='submit'
-              variant='contained'
-              color='secondary'
-              data-cy='login-phone-button'
-              loading={loading}
-            >
-              Sign In
-            </LoadingButton>
-          </AnimateButton>
-        </Box>
+    return (
+        <>
+            <Grid container direction='column' justifyContent='center' spacing={2}>
+                <Grid item xs={12}>
+                    <Box
+                        sx={{
+                            alignItems: 'center',
+                            display: 'flex',
+                        }}
+                    >
+                        <Divider sx={{flexGrow: 1}} orientation='horizontal'/>
+                    </Box>
+                </Grid>
+            </Grid>
 
-        {error && (
-          <Grid
-            data-cy='login-error-container'
-            container
-            direction='row'
-            alignItems='center'
-            justifyContent='center'
-          >
-            <Typography
-              variant='caption'
-              fontSize='16px'
-              textAlign='center'
-              color='palevioletred'
-            >
-              Error Happened!
-            </Typography>
-          </Grid>
-        )}
-      </form>
-    </>
-  )
+            <form onSubmit={handleSubmit}>
+                <TextField
+                    fullWidth
+                    label='Phone Number'
+                    name='phoneNumber'
+                    type='text'
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    data-cy='login-phone-input'
+                />
+                <Box style={{margin: '30px'}}/>
+                <FormControl
+                    fullWidth
+                    // error={Boolean(touched.password && errors.password)}
+                >
+                    <InputLabel htmlFor='outlined-adornment-password-login'>
+                        Password
+                    </InputLabel>
+                    <OutlinedInput
+                        id='outlined-adornment-password-login'
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        name='password'
+                        data-cy='login-password-input'
+                        onChange={(e) => setPassword(e.target.value)}
+                        endAdornment={
+                            <InputAdornment position='end'>
+                                <IconButton
+                                    aria-label='toggle password visibility'
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge='end'
+                                    size='large'
+                                >
+                                    {showPassword ? <Visibility/> : <VisibilityOff/>}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                        label='Password'
+                        inputProps={{}}
+                    />
+                </FormControl>
+
+                <Box sx={{mt: 2}}>
+                    <AnimateButton>
+                        <LoadingButton
+                            disableElevation
+                            disabled={loading}
+                            fullWidth
+                            size='large'
+                            type='submit'
+                            variant='contained'
+                            color='secondary'
+                            data-cy='login-phone-button'
+                            loading={loading}
+                        >
+                            Sign In
+                        </LoadingButton>
+                    </AnimateButton>
+                </Box>
+
+                {error || loginError && (
+                    <Grid
+                        data-cy='login-error-container'
+                        container
+                        direction='row'
+                        alignItems='center'
+                        justifyContent='center'
+                    >
+                        <Typography
+                            variant='caption'
+                            fontSize='16px'
+                            textAlign='center'
+                            color='palevioletred'
+                        >
+                            Error Happened!
+                        </Typography>
+                    </Grid>
+                )}
+            </form>
+        </>
+    )
 }
 
 export default FirebaseLogin

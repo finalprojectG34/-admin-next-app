@@ -28,6 +28,7 @@ export const GET_ALL_COMPANY = gql`
         imagePath
       }
       count
+      role
     }
   }
 `
@@ -63,6 +64,7 @@ export const GET_ONE_COMPANY = gql`
       status
       sellingCategories
       count
+      role
     }
   }
 `

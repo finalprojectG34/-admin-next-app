@@ -56,6 +56,7 @@ export const SIGN_IN = gql`
         firstName
         lastName
         email
+        role
       }
       token
     }
