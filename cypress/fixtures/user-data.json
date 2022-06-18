@@ -1,10 +1,10 @@
 {
     "allValid": {
-        "firstName": "Bereket",
-        "lastName": "Zemed",
+        "firstName": "Nathnal",
+        "lastName": "Yewo",
         "phoneNumber": "+251900000000",
         "password": "password",
-        "email": "email@gmail.com",
+        "email": "nati@gmail.com",
         "verificationCode": "000000"
     },
     "inValidPhoneNumber": {
@@ -16,15 +16,15 @@
         "verificationCode": "000000"
     },
     "invalidPassword": {
-        "firstName": "Bereket",
-        "lastName": "Zemed",
+        "firstName": "Yonathan",
+        "lastName": "Endale",
         "phoneNumber": "+251900000000",
         "password": "pas",
         "email": "email@gmail.com",
         "verificationCode": "000000"
     },
     "invalidFullName": {
-        "firstName": "Bereket@",
+        "firstName": "Moti@",
         "lastName": "Ze12",
         "phoneNumber": "+251900000000",
         "password": "password",
