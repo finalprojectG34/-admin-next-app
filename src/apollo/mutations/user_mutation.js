@@ -4,23 +4,18 @@ export const CREATE_USER = gql`
   mutation Mutation($input: UserCreateInput!) {
     createUser(input: $input) {
       id
-      firstName
-      lastName
-      phone
-      password
-      email
     }
   }
 `
 
 export const UPDATE_USER = gql`
-  mutation ($input: UserUpdateInput!, $updateUserId: String) {
-    updateUser(input: $input, id: $updateUserId) {
+  mutation ($updateUserId: String, $input: UserUpdateInput!) {
+    updateUser(id: $updateUserId, input: $input) {
       id
       firstName
       lastName
-      email
       phone
+      email
     }
   }
 `
@@ -45,7 +40,6 @@ export const SIGN_UP = gql`
         firstName
         lastName
         phone
-        password
         email
       }
       token
@@ -61,7 +55,6 @@ export const SIGN_IN = gql`
         id
         firstName
         lastName
-        password
         email
       }
       token

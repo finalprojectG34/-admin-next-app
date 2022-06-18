@@ -1,4 +1,4 @@
-import {gql} from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const CREATE_CATEGORY = gql`
   mutation Mutation($input: CategoryInput!) {
@@ -9,7 +9,7 @@ export const CREATE_CATEGORY = gql`
       description
     }
   }
-`;
+`
 
 export const DELETE_CATEGORY = gql`
   mutation ($deleteCategoryId: ID!) {
@@ -17,20 +17,18 @@ export const DELETE_CATEGORY = gql`
       id
     }
   }
-`;
+`
 
 export const UPDATE_CATEGORY = gql`
   mutation ($input: CategoryInput!) {
     updateCategory(input: $input) {
       id
       description
-      facets
       image
       name
       parentId
-      parentsPath
       path
       slug
     }
   }
-`;
+`

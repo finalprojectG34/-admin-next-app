@@ -1,139 +1,157 @@
-import React, {useState} from 'react';
-import {useRouter} from "next/router";
-import {useMutation} from '@apollo/client';
+import { useMutation } from '@apollo/client'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 
-import {Box, FormControl, Grid, InputLabel, MenuItem, Select, Typography} from '@mui/material';
-import {LoadingButton} from "@mui/lab";
+import { LoadingButton } from '@mui/lab'
+import {
+  Box,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from '@mui/material'
 
-import MainCard from '../../../src/ui-components/cards/MainCard';
-import {InputField} from '../../../src/ui-components/input/InputField';
+import MainCard from '../../../src/ui-components/cards/MainCard'
+import { InputField } from '../../../src/ui-components/input/InputField'
 
-import AnimateButton from "../../../src/ui-components/extended/AnimateButton";
-import {CREATE_USER} from "../../../src/apollo/mutations/user_mutation";
-
+import { CREATE_USER } from '../../../src/apollo/mutations/user_mutation'
+import AnimateButton from '../../../src/ui-components/extended/AnimateButton'
 
 const UserCreate = () => {
-    const router = useRouter();
+  const router = useRouter()
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-    const [role, setRole] = useState('');
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [role, setRole] = useState('')
 
-    const [createUser, {loading, error}] = useMutation(CREATE_USER);
+  const [createUser, { loading, error, data }] = useMutation(CREATE_USER)
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(
-            {
-                firstName,
-                lastName,
-                phone,
-                role
-            })
-        createUser({
-            variables: {
-                input: {
-                    firstName,
-                    lastName,
-                    phone,
-                    role
-                }
-            }
-        }).then((data) => {
-            router.push("/user/user-list")
-            console.log("user creation success", data)
-        }).catch(e => {
-            console.log("user creation error", e)
-        });
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault()
 
-    return (
-        <MainCard title='Create User' sx={{margin: 'auto'}} style={{maxWidth: 'max-content'}}>
-            <form onSubmit={handleSubmit}>
-                <InputField
-                    label='First Name'
-                    name='firstName'
-                    placeholder='First Name'
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    dataCy='user-firstName-input'
-                />
+    createUser({
+      variables: {
+        input: {
+          firstName,
+          lastName,
+          phone,
+          role,
+        },
+      },
+    })
+    // .then((data) => {
+    //   router.push('/user/user-list')
+    //   console.log('user creation success', data)
+    // })
+    // .catch((e) => {
+    //   console.log('user creation error', e)
+    // })
+  }
 
-                <InputField
-                    label='Last Name'
-                    name='lastName'
-                    placeholder='Last Name'
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    dataCy='user-lastName-input'
-                />
+  return (
+    <MainCard
+      title='Create User'
+      sx={{ margin: 'auto' }}
+      style={{ maxWidth: 'max-content' }}
+    >
+      <form onSubmit={handleSubmit}>
+        <InputField
+          label='First Name'
+          name='firstName'
+          placeholder='First Name'
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          dataCy='user-firstName-input'
+        />
 
-                <InputField
-                    label='Email'
-                    name='email'
-                    type='email'
-                    placeholder='Image'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    dataCy='user-email-input'
-                />
+        <InputField
+          label='Last Name'
+          name='lastName'
+          placeholder='Last Name'
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          dataCy='user-lastName-input'
+        />
 
-                <InputField
-                    label='Phone Number'
-                    name='phone'
-                    placeholder='Phone Number'
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    dataCy='user-phoneNumber-input'
-                />
+        <InputField
+          label='Email'
+          name='email'
+          type='email'
+          placeholder='Image'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          dataCy='user-email-input'
+        />
 
-                <FormControl fullWidth margin='normal'>
-                    <InputLabel id='role-label'>Role</InputLabel>
-                    <Select
-                        labelId='role-label'
-                        id='role-select'
-                        value={role}
-                        label='Role'
-                        onChange={(e) => setRole(e.target.value)}
-                        data-cy='user-role-select'
-                    >
-                        <MenuItem value='user'>USER</MenuItem>
-                        <MenuItem value='admin'>ADMIN</MenuItem>
-                        <MenuItem value='seller'>SELLER</MenuItem>
-                        <MenuItem value='super'>SUPER</MenuItem>
-                    </Select>
-                </FormControl>
+        <InputField
+          label='Phone Number'
+          name='phone'
+          placeholder='Phone Number'
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          dataCy='user-phoneNumber-input'
+        />
 
-                <Box sx={{mt: 2}}>
-                    <AnimateButton>
-                        <LoadingButton
-                            disableElevation
-                            disabled={loading}
-                            fullWidth
-                            size='large'
-                            type='submit'
-                            variant='contained'
-                            color='secondary'
-                            loading={loading}
-                            data-cy='user-create-button'
-                        >
-                            Create User
-                        </LoadingButton>
-                    </AnimateButton>
-                </Box>
+        <FormControl sx={{ width: '-webkit-fill-available' }} margin='normal'>
+          <InputLabel id='role-label'>Role</InputLabel>
+          <Select
+            labelId='role-label'
+            id='role-select'
+            value={role}
+            label='Role'
+            onChange={(e) => setRole(e.target.value)}
+            data-cy='user-role-select'
+          >
+            <MenuItem value='USER'>USER</MenuItem>
+            <MenuItem value='ADMIN'>ADMIN</MenuItem>
+            <MenuItem value='SELLER'>SELLER</MenuItem>
+            <MenuItem value='SUPER'>SUPER</MenuItem>
+          </Select>
+        </FormControl>
 
-                {error && (
-                    <Grid xs={12} container direction="row" alignItems='center' justifyContent='center'>
-                        <Typography variant='caption' fontSize='16px' textAlign="center" color="palevioletred">
-                            Error Happened!
-                        </Typography>
-                    </Grid>
-                )}
-            </form>
-        </MainCard>
-    );
-};
+        <Box sx={{ mt: 2 }}>
+          <AnimateButton>
+            <LoadingButton
+              disableElevation
+              disabled={loading}
+              fullWidth
+              size='large'
+              type='submit'
+              variant='contained'
+              color='secondary'
+              loading={loading}
+              data-cy='user-create-button'
+            >
+              Create User
+            </LoadingButton>
+          </AnimateButton>
+        </Box>
 
-export default UserCreate;
+        {error && (
+          <Grid
+            xs={12}
+            container
+            direction='row'
+            alignItems='center'
+            justifyContent='center'
+          >
+            <Typography
+              variant='caption'
+              fontSize='16px'
+              textAlign='center'
+              color='palevioletred'
+            >
+              Error Happened!
+            </Typography>
+          </Grid>
+        )}
+      </form>
+    </MainCard>
+  )
+}
+
+export default UserCreate
