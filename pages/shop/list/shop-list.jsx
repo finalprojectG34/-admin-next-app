@@ -14,6 +14,9 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  Tabs,
+  Tab,
+  Box,
 } from '@mui/material'
 
 import MainCard from '../../../src/ui-components/cards/MainCard'
@@ -35,6 +38,11 @@ const CompanyList = () => {
   const [open, setOpen] = useState(false)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [value, setValue] = useState(0)
+
+  const handleChange = (newValue) => {
+    setValue(newValue)
+  }
 
   const { data: getOneCompany } = useQuery(GET_ONE_COMPANY, {
     variables: { getOneCompanyId: currentUserId },
@@ -55,6 +63,8 @@ const CompanyList = () => {
     setOpen(true)
     setCurrentUserId(id)
   }
+
+  const STATUS = ['Pending', 'Verified', 'Rejected', 'Blocked']
 
   if (error)
     return (
@@ -77,6 +87,17 @@ const CompanyList = () => {
           refetch={refetch}
         />
       )}
+      <Box mb={2}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          sx={{ justifyContent: 'space-between !important' }}
+        >
+          {STATUS.map((status, index) => (
+            <Tab key={index} label={status} />
+          ))}
+        </Tabs>
+      </Box>
       <Typography variant='body2' component='div'>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650, bgcolor: '#00000021' }}>

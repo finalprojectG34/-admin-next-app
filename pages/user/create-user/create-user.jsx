@@ -96,7 +96,7 @@ const UserCreate = () => {
           dataCy='user-phoneNumber-input'
         />
 
-        <FormControl fullWidth margin='normal'>
+        <FormControl sx={{ width: '-webkit-fill-available' }} margin='normal'>
           <InputLabel id='role-label'>Role</InputLabel>
           <Select
             labelId='role-label'

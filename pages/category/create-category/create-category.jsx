@@ -38,7 +38,7 @@ const CategoryCreate = () => {
     <MainCard
       title='Create Category'
       sx={{ margin: 'auto' }}
-      style={{ maxWidth: 'max-content' }}
+      style={{ maxWidth: 'fit-content' }}
     >
       <form onSubmit={handleSubmit}>
         <InputField

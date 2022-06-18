@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const CREATE_COMPANY = gql`
-  mutation Mutation($input: CompanyCreateInput!) {
+  mutation Mutation($input: CompanyInput!) {
     createCompany(input: $input) {
       id
       name
