@@ -66,3 +66,38 @@ export const GET_ONE_COMPANY = gql`
     }
   }
 `
+export const FILTER_COMPANY = gql`
+query Query($input: CompanyFilter) {
+  getAllCompanies(input: $input) {
+    id
+    name
+    status
+    slug
+    description
+    phoneNumber
+    tinNumber
+    address {
+      location {
+        coordinates
+      }
+      subCity
+      city
+      addressName
+      country
+    }
+    image {
+      images
+      bgImage
+      imageCover
+      suffix
+      imagePath
+    }
+    poster
+    ownerId
+    haveLicense
+    sellingCategories
+    count
+    role
+  }
+}
+`

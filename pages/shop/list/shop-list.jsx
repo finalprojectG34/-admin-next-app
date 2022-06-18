@@ -1,5 +1,5 @@
-import { useMutation, useQuery } from '@apollo/client'
-import { useState } from 'react'
+import {useLazyQuery, useMutation, useQuery} from '@apollo/client'
+import {useEffect, useState} from 'react'
 
 import { CachedOutlined, HighlightOffOutlined } from '@mui/icons-material'
 import {
@@ -16,7 +16,7 @@ import {
   Typography,
   Tabs,
   Tab,
-  Box,
+  Box
 } from '@mui/material'
 
 import MainCard from '../../../src/ui-components/cards/MainCard'
@@ -24,14 +24,14 @@ import Loader from '../../../src/ui-components/Loader'
 
 import { DELETE_COMPANY } from '../../../src/apollo/mutations/shop_mutations'
 import {
-  GET_ALL_COMPANY,
+  FILTER_COMPANY,
   GET_ONE_COMPANY,
 } from '../../../src/apollo/queries/company_queries'
 import CompanyUpdate from '../../../src/ui-components/update-cards/CompanyUpdate'
 import { useRouter } from 'next/router'
 
 const CompanyList = () => {
-  const { data, error, loading, refetch } = useQuery(GET_ALL_COMPANY)
+  const [getFilterCompany,{data: searchData, error, loading}] = useLazyQuery(FILTER_COMPANY, {fetchPolicy: "no-cache"})
   const [deleteCompany] = useMutation(DELETE_COMPANY)
   const [currentUserId, setCurrentUserId] = useState('')
 
@@ -39,11 +39,26 @@ const CompanyList = () => {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [value, setValue] = useState(0)
+  const STATUS = ['Pending', 'Verified', 'Rejected', 'Blocked']
 
-  const handleChange = (newValue) => {
+  useEffect(() => {
+    getFilterCompany({
+      variables: { input: {
+          status: "Pending"
+        }}
+    }).then(() => console.log('filter added'))
+  }, [])
+
+  const handleChange =  (event,newValue) => {
     setValue(newValue)
-  }
 
+  getFilterCompany({
+      variables: { input: {
+          status: STATUS[newValue]
+        }}
+    }).then(() => console.log('Successfully filtered.'))
+
+  }
   const { data: getOneCompany } = useQuery(GET_ONE_COMPANY, {
     variables: { getOneCompanyId: currentUserId },
   })
@@ -62,9 +77,11 @@ const CompanyList = () => {
   const setCompanyUpdate = (id) => {
     setOpen(true)
     setCurrentUserId(id)
+
+
   }
 
-  const STATUS = ['Pending', 'Verified', 'Rejected', 'Blocked']
+  console.log(searchData?.getAllCompanies)
 
   if (error)
     return (
@@ -91,13 +108,15 @@ const CompanyList = () => {
         <Tabs
           value={value}
           onChange={handleChange}
-          sx={{ justifyContent: 'space-between !important' }}
+          variant="fullWidth"
         >
+
           {STATUS.map((status, index) => (
-            <Tab key={index} label={status} />
+            <Tab key={index} label={status}  />
           ))}
         </Tabs>
       </Box>
+      {
       <Typography variant='body2' component='div'>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650, bgcolor: '#00000021' }}>
@@ -114,86 +133,91 @@ const CompanyList = () => {
               </TableRow>
             </TableHead>
             <TableBody data-cy='category-list'>
-              {(rowsPerPage > 0
-                ? data?.getAllCompanies?.slice(
-                    page * rowsPerPage,
-                    page * rowsPerPage + rowsPerPage
-                  )
-                : data?.getAllCompanies
-              ).map((company, index) =>
-                !company ? null : (
-                  <TableRow
-                    key={company.id}
-                    sx={{
-                      '&:last-child td, &:last-child th': { border: 0 },
-                    }}
-                  >
-                    <TableCell component='th' scope='row'>
-                      {index + 1}
-                    </TableCell>
-                    <TableCell
-                      align='left'
-                      sx={{
-                        cursor: 'pointer',
-                      }}
-                      onClick={() =>
-                        router.push(`${router.pathname}/${company.id}`)
-                      }
-                    >
-                      {company.name}
-                    </TableCell>
-                    <TableCell align='left'>{company.description}</TableCell>
-                    <TableCell align='center'>
-                      {`${company.address.city}, ${company.address.subCity}, ${company.address.addressName}`}
-                    </TableCell>
-                    <TableCell align='left'>{company.tinNumber}</TableCell>
-                    <TableCell align='left'>{company.status}</TableCell>
 
-                    <TableCell align='right'>
-                      <HighlightOffOutlined
-                        data-cy='shop-delete-element'
-                        color='error'
-                        sx={{ cursor: 'pointer' }}
-                        onClick={() => {
-                          deleteCompany({
-                            variables: {
-                              deleteCompanyId: company.id,
-                            },
-                            update: (cache) => {
-                              cache.evict({ id: 'Company:' + company.id })
-                            },
-                          }).then(() => {})
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell align='right'>
-                      <CachedOutlined
-                        onClick={() => setCompanyUpdate(company.id)}
-                        color='success'
-                        sx={{ cursor: 'pointer' }}
-                        fontSize='small'
-                      />
-                    </TableCell>
-                  </TableRow>
-                )
+              {searchData && (rowsPerPage > 0
+                      ? searchData?.getAllCompanies?.slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                      )
+                      : searchData?.getAllCompanies
+              ).map((company, index) =>
+                  !company ? null : (
+                      <TableRow
+                          key={company.id}
+                          sx={{
+                            '&:last-child td, &:last-child th': { border: 0 },
+                          }}
+                      >
+                        <TableCell component='th' scope='row'>
+                          {index + 1}
+                        </TableCell>
+                        <TableCell
+                            align='left'
+                            sx={{
+                              cursor: 'pointer',
+                            }}
+                            onClick={() =>
+                                router.push(`${router.pathname}/${company.id}`)
+                            }
+                        >
+                          {company.name}
+                        </TableCell>
+                        <TableCell align='left'>{company.description}</TableCell>
+                        <TableCell align='center'>
+                          {`${company.address.city}, ${company.address.subCity}, ${company.address.addressName}`}
+                        </TableCell>
+                        <TableCell align='left'>{company.tinNumber}</TableCell>
+                        <TableCell align='left'>{company.status}</TableCell>
+
+                        <TableCell align='right'>
+                          <HighlightOffOutlined
+                              data-cy='shop-delete-element'
+                              color='error'
+                              sx={{ cursor: 'pointer' }}
+                              onClick={() => {
+                                deleteCompany({
+                                  variables: {
+                                    deleteCompanyId: company.id,
+                                  },
+                                  update: (cache) => {
+                                    cache.evict({ id: 'Company:' + company.id })
+                                  },
+                                }).then(() => {})
+                              }}
+                          />
+                        </TableCell>
+                        <TableCell align='right'>
+                          <CachedOutlined
+                              onClick={() => setCompanyUpdate(company.id)}
+                              color='success'
+                              sx={{ cursor: 'pointer' }}
+                              fontSize='small'
+                          />
+                        </TableCell>
+                      </TableRow>
+                  )
               )}
             </TableBody>
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                  colSpan={3}
-                  count={data?.getAllCompanies?.length || 0}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    colSpan={3}
+                    count={searchData?.getAllCompanies?.length || 0}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </TableRow>
             </TableFooter>
           </Table>
+
+
         </TableContainer>
       </Typography>
+      }
+
     </MainCard>
   )
 }

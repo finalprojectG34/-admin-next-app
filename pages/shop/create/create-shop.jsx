@@ -31,6 +31,7 @@ const CompanyCreate = () => {
   const [tinNumber, setTinNumber] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [role, setRole] = useState('')
+  const [country, setCountry] = useState('')
 
   const [filePath, setFilePath] = useState(null)
   const [picture, setPicture] = useState(null)
@@ -100,6 +101,7 @@ const CompanyCreate = () => {
               subCity: subCity,
               city: city,
               addressName: addressName,
+              country,
             },
             role,
             tinNumber: tinNumber,
@@ -149,6 +151,14 @@ const CompanyCreate = () => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           dataCy='company-description-input'
+        />
+        <InputField
+            label='Country'
+            name='country'
+            placeholder='Country'
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            dataCy='company-country-input'
         />
         <InputField
           label='City'
