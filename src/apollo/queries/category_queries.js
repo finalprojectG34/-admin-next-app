@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import {gql} from '@apollo/client'
 
 export const GET_ALL_CATEGORIES = gql`
   query {
@@ -21,4 +21,23 @@ export const GET_ONE_CATEGORY = gql`
       description
     }
   }
+`
+export const SEARCH_CATEGORY_BY_NAME = gql`
+query($name: String) {
+  searchCategoryByName(name: $name) {
+    id
+    slug
+    name
+    image {
+      imagePath
+    }
+    poster
+    description
+    path
+    parentId
+    haveSubCtg
+    canHaveItems
+    count
+  }
+}
 `

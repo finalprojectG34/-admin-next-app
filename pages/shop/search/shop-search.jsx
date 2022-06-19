@@ -1,32 +1,72 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {useLazyQuery} from "@apollo/client";
 
-import {Alert, Box, Button, Card, CardContent, TextField, Typography} from '@mui/material';
+import {
+    Alert,
+    Box,
+    Button,
+    Card,
+    CardContent, FormControl,
+    FormControlLabel,
+    FormLabel, Radio,
+    RadioGroup,
+    TextField,
+    Typography
+} from '@mui/material';
 
 import MainCard from '../../../src/ui-components/cards/MainCard';
 import Loader from "../../../src/ui-components/Loader";
+import {SEARCH_COMPANY_BY_NAME} from "../../../src/apollo/queries/company_queries";
 
-import {GET_ONE_COMPANY} from "../../../src/apollo/queries/company_queries";
 
 
 const CompanySearch = () => {
-    const [getShop, {data, error, loading}] = useLazyQuery(GET_ONE_COMPANY);
+    const [getShop, {data, error, loading}] = useLazyQuery(SEARCH_COMPANY_BY_NAME);
     const [text, setText] = useState('');
+    const [isSubmitted, setIsSubmitted] = useState(false)
 
-    if (error)
-        return (
-            <Alert variant='outlined' severity='error'>
-                {error.message}
-            </Alert>
-        );
+    useEffect(() => {
+        let timer = isSubmitted && setTimeout(() => setIsSubmitted(false), 2000)
+        return () => {
+            clearTimeout(timer)
+        }
+    }, [isSubmitted])
+
     if (loading) return <Loader/>;
+
+    console.log(data)
     return (
-        <MainCard title='Shop Search' sx={{margin: 'auto'}} style={{maxWidth: 'max-content'}}>
+        <MainCard title='Shop Search'>
+            {
+                error && <Alert variant='outlined' severity='error'>
+                    {error.message}
+                </Alert>
+            }
+
+            {
+                isSubmitted && !data?.searchCompanyByName?.length && <Alert variant='outlined' severity='error' sx={{mb: 2}}>
+                    No Shop Found.
+                </Alert>
+            }
             <Typography variant='body2' component="div">
                 <Box mb={4}>
-                    <Box sx={{display: 'flex'}}>
+                    <FormControl component='fieldset'>
+                        <FormLabel component='legend'>Search By</FormLabel>
+                        <RadioGroup
+                            aria-label='Search By'
+                            defaultValue='shopName'
+                            name='radio-buttons-group'
+                        >
+                            <FormControlLabel
+                                value='shopName'
+                                control={<Radio/>}
+                                label='Shop Name'
+                            />
+                        </RadioGroup>
+                    </FormControl>
+                    <Box sx={{display: 'flex'}} mt={2}>
                         <TextField
-                            label={text}
+                            label="Shop Name"
                             variant='outlined'
                             value={text}
                             onChange={e => setText(e.target.value)}
@@ -39,9 +79,10 @@ const CompanySearch = () => {
                             onClick={() => {
                                 getShop({
                                     variables: {
-                                        "getOneCompanyId": text
+                                        name: text
                                     }
                                 }).then(() => {
+                                    setIsSubmitted(true)
                                 }).catch(e => {
                                     console.log("error=====>", e)
                                 });
@@ -52,34 +93,43 @@ const CompanySearch = () => {
                         </Button>
                     </Box>
                 </Box>
-                {data && (
-                    <Card sx={{maxWidth: 275, bgcolor: '#00000021'}}>
+                {data && data?.searchCompanyByName.map(searchCompany => (
+                    <Card sx={{maxWidth: 275, bgcolor: '#00000021', mb: 1.5}} key={searchCompany.id}>
                         <CardContent>
-                            {data.getOneCompany?.id && (
-                                <Typography sx={{fontSize: 18}} gutterBottom data-cy='shop-id-search-result'>
-                                    Id: {data.getOneCompany.id}
-                                </Typography>
-                            )}
 
-                            {data.getOneCompany?.name && (
+                            {searchCompany?.name && (
                                 <Typography sx={{fontSize: 18}} gutterBottom>
-                                    Name: {data.getOneCompany.name}
+                                    Name: {searchCompany.name}
                                 </Typography>
                             )}
 
-                            {data.getOneCompany?.lastName && (
+                            {searchCompany?.phoneNumber && (
                                 <Typography sx={{mb: 1.5}}>
-                                    Phone Number: {data.getOneCompany.phoneNumber}
+                                    Phone Number: {searchCompany.phoneNumber}
                                 </Typography>
                             )}
-                            {data.getOneCompany?.email && (
+                            {searchCompany?.description && (
                                 <Typography sx={{mb: 1.5}}>
-                                    Description: {data.getOneCompany.description}
+                                    Description: {searchCompany.description}
+                                </Typography>
+                            )}
+
+                            {searchCompany?.role && (
+                                <Typography sx={{mb: 1.5}}>
+                                    Role: {searchCompany.role}
+                                </Typography>
+                            )}
+
+                            {searchCompany?.status && (
+                                <Typography sx={{mb: 1.5}}>
+                                    Status: {searchCompany.status}
                                 </Typography>
                             )}
                         </CardContent>
                     </Card>
-                )}
+                ))
+
+                }
             </Typography>
         </MainCard>
     );

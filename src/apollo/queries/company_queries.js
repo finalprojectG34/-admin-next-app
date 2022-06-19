@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import {gql} from '@apollo/client'
 
 export const GET_ALL_COMPANY = gql`
   query GetAllCompanies {
@@ -62,7 +62,6 @@ export const GET_ONE_COMPANY = gql`
       ownerId
       haveLicense
       status
-      sellingCategories
       count
       role
     }
@@ -97,7 +96,34 @@ query Query($input: CompanyFilter) {
     poster
     ownerId
     haveLicense
-    sellingCategories
+    count
+    role
+  }
+}
+`
+export const SEARCH_COMPANY_BY_NAME = gql`
+query($name: String) {
+  searchCompanyByName(name: $name) {
+    id
+    slug
+    name
+    description
+    phoneNumber
+    tinNumber
+    address {
+      subCity
+      city
+      addressName
+      country
+    }
+    image {
+      imagePath
+    }
+    poster
+    ownerId
+    ownerName
+    haveLicense
+    status
     count
     role
   }

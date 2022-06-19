@@ -24,8 +24,8 @@ import { GET_ALL_CATEGORIES } from '../../../src/apollo/queries/category_queries
 import { DELETE_CATEGORY } from '../../../src/apollo/mutations/category_mutation'
 
 const CategoryList = () => {
-  const { data, error, loading } = useQuery(GET_ALL_CATEGORIES)
-  const [deleteCategory] = useMutation(DELETE_CATEGORY)
+  const { data, error, loading, refetch } = useQuery(GET_ALL_CATEGORIES, {fetchPolicy: 'no-cache'})
+  const [deleteCategory] = useMutation(DELETE_CATEGORY, {fetchPolicy: 'no-cache'})
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
@@ -91,10 +91,7 @@ const CategoryList = () => {
                             variables: {
                               deleteCategoryId: category.id,
                             },
-                            update: (cache) => {
-                              cache.evict({ id: 'Category:' + category.id })
-                            },
-                          })
+                          }).then(() => refetch())
                         }}
                       />
                     </TableCell>

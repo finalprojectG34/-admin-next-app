@@ -43,7 +43,7 @@ const FirebaseLogin = () => {
     const [signIn, {loading, error}] = useMutation(SIGN_IN)
     const [loginError, setLoginError] = useState(false)
 
-
+    console.log(loginError)
     const handleSubmit = (e) => {
         e.preventDefault()
         signIn({
@@ -56,7 +56,7 @@ const FirebaseLogin = () => {
             },
         })
             .then((res) => {
-                if (res.data.login.role === "ADMIN") {
+                if (res.data.login.user.role === "ADMIN") {
                     setSessionToken(res.data.login.token)
                     setRolesData(['ADMIN'])
                     setLoginError(false)

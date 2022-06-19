@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 
 import {
   Alert,
@@ -24,11 +24,11 @@ import {
 } from '../../../src/apollo/queries/user_queries'
 import { DELETE_USER } from '../../../src/apollo/mutations/user_mutation'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import UserUpdate from '../../../src/ui-components/update-cards/UserUpdate'
 
 const UserList = () => {
-  const { data, error, loading, refetch } = useQuery(GET_ALL_USERS)
+  const { data, error, loading, refetch } = useQuery(GET_ALL_USERS, {fetchPolicy: 'no-cache'})
 
   const [deleteUser] = useMutation(DELETE_USER)
 
@@ -120,10 +120,8 @@ const UserList = () => {
                             variables: {
                               deleteUserId: user.id,
                             },
-                            update: (cache) => {
-                              cache.evict({ id: 'User:' + user.id })
-                            },
-                          }).then(() => {})
+
+                          }).then(() => {refetch()})
                         }}
                         color='error'
                         sx={{ cursor: 'pointer' }}

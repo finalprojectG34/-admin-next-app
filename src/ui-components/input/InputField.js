@@ -7,7 +7,9 @@ export const InputField = ({
                                type,
                                value,
                                onChange,
-                               dataCy
+                               dataCy,
+    error,
+    helper
                            }) => {
     return (
         <TextField
@@ -21,6 +23,9 @@ export const InputField = ({
             onChange={onChange}
             fullWidth
             margin='normal'
+            error={error}
+            helperText={helper}
+            required={true}
             data-cy={dataCy}
         />
     );

@@ -36,7 +36,7 @@ export const DELETE_COMPANY = gql`
   }
 `
 export const UPDATE_COMPANY = gql`
-  mutation Mutation($input: UserCompanyInput!, $updateCompanyId: String) {
+  mutation Mutation($input: CompanyInput!, $updateCompanyId: String) {
     updateCompany(input: $input, id: $updateCompanyId) {
       id
     }

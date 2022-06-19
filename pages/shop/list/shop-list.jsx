@@ -1,4 +1,4 @@
-import {useLazyQuery, useMutation, useQuery} from '@apollo/client'
+import {useLazyQuery, useMutation} from '@apollo/client'
 import {useEffect, useState} from 'react'
 
 import {CachedOutlined, HighlightOffOutlined} from '@mui/icons-material'
@@ -31,20 +31,31 @@ import CompanyUpdate from '../../../src/ui-components/update-cards/CompanyUpdate
 import {useRouter} from 'next/router'
 
 const CompanyList = () => {
+    const [currentUserId, setCurrentUserId] = useState('')
+    const[getSingleCompany, {data: getOneCompany}] = useLazyQuery(GET_ONE_COMPANY, {
+        fetchPolicy: 'no-cache'
+    })
+
+    useEffect(() => {
+        currentUserId !== '' && getSingleCompany({variables: {getOneCompanyId: currentUserId}})
+    }, [currentUserId])
+
     const [getFilterCompany, {
         data: searchData,
         error,
-        loading
+        loading,
+        refetch
     }] = useLazyQuery(FILTER_COMPANY, {fetchPolicy: "no-cache"})
-    const [deleteCompany] = useMutation(DELETE_COMPANY)
-    const [currentUserId, setCurrentUserId] = useState('')
+
+
+
+    const [deleteCompany] = useMutation(DELETE_COMPANY, {fetchPolicy: 'no-cache'})
 
     const [open, setOpen] = useState(false)
     const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(5)
     const [value, setValue] = useState(0)
     const STATUS = ['Pending', 'Verified', 'Rejected', 'Blocked']
-
     useEffect(() => {
         getFilterCompany({
             variables: {
@@ -64,12 +75,10 @@ const CompanyList = () => {
                     status: STATUS[newValue]
                 }
             }
-        }).then(() => console.log('Successfully filtered.'))
+        }).then(() => {})
 
     }
-    const {data: getOneCompany} = useQuery(GET_ONE_COMPANY, {
-        variables: {getOneCompanyId: currentUserId},
-    })
+
 
     const router = useRouter()
 
@@ -85,9 +94,8 @@ const CompanyList = () => {
     const setCompanyUpdate = (id) => {
         setOpen(true)
         setCurrentUserId(id)
-
-
     }
+
 
 
     if (error)
@@ -185,11 +193,9 @@ const CompanyList = () => {
                                                         deleteCompany({
                                                             variables: {
                                                                 deleteCompanyId: company.id,
-                                                            },
-                                                            update: (cache) => {
-                                                                cache.evict({id: 'Company:' + company.id})
-                                                            },
+                                                            }
                                                         }).then(() => {
+                                                            refetch()
                                                         })
                                                     }}
                                                 />

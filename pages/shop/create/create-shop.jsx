@@ -11,7 +11,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  Select,
+  Select, Alert,
 } from '@mui/material'
 
 import MainCard from '../../../src/ui-components/cards/MainCard'
@@ -38,6 +38,8 @@ const CompanyCreate = () => {
   const [fileSizeError, setFileSizeError] = useState(null)
   const [url, setUrl] = useState(null)
   const [isCreating, setIsCreating] = useState(null)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
 
   const [createCompany, { loading, error }] = useMutation(CREATE_COMPANY)
 
@@ -85,6 +87,13 @@ const CompanyCreate = () => {
   }
 
   useEffect(() => {
+    let timer = isSubmitted && setTimeout(() => setIsSubmitted(false), 2000)
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [isSubmitted])
+
+  useEffect(() => {
     if (url) {
       createCompany({
         variables: {
@@ -117,6 +126,7 @@ const CompanyCreate = () => {
       }).then((data) => {
         console.log('==============>', data)
         setIsCreating(false)
+        setIsSubmitted(true)
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -128,6 +138,15 @@ const CompanyCreate = () => {
       sx={{ margin: 'auto' }}
       style={{ maxWidth: 'max-content' }}
     >
+      {
+          isSubmitted && <Alert
+              variant="filled"
+              severity={'success'}
+
+          >
+            Shop Created Successfully.
+          </Alert>
+      }
       {isCreating && (
         <Dialog open={true}>
           <div className='vw-100 uploading'>
@@ -180,6 +199,7 @@ const CompanyCreate = () => {
           label='Phone Number'
           name='phoneNumber'
           placeholder='Phone Number'
+          type={'number'}
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
           dataCy='company-phoneNumber-input'
@@ -195,6 +215,7 @@ const CompanyCreate = () => {
         <InputField
           label='Tin Number'
           name='tin-number'
+          type={'number'}
           placeholder='Tin Number'
           value={tinNumber}
           onChange={(e) => setTinNumber(e.target.value)}
@@ -208,6 +229,7 @@ const CompanyCreate = () => {
             id='role-select'
             value={role}
             label='Role'
+            required={true}
             onChange={(e) => setRole(e.target.value)}
           >
             {ROLE.map((role, index) => (
@@ -226,6 +248,7 @@ const CompanyCreate = () => {
               type='file'
               accept='.gif,.jpg,.jpeg,.png'
               className=''
+              required={true}
               onChange={handleFile}
             />
           </div>
