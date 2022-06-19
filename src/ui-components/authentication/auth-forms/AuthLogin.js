@@ -41,7 +41,8 @@ const FirebaseLogin = () => {
     const [sessionToken, setSessionToken] = useLocalStorage('store', null)
     const [rolesData, setRolesData] = useLocalStorage('roles', null)
     const [signIn, {loading, error}] = useMutation(SIGN_IN)
-    const [loginError, setLoginError] = useState('')
+    const [loginError, setLoginError] = useState(false)
+
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -56,10 +57,12 @@ const FirebaseLogin = () => {
         })
             .then((res) => {
                 if (res.data.login.role === "ADMIN") {
-                    setRolesData(['ADMIN'])
                     setSessionToken(res.data.login.token)
+                    setRolesData(['ADMIN'])
+                    setLoginError(false)
                 } else {
-                    setLoginError('Access Denied')
+                    setLoginError(true)
+                    setTimeout(() => setLoginError(false), 2000)
                 }
 
                 setPhoneNumber('')
@@ -67,6 +70,8 @@ const FirebaseLogin = () => {
 
             })
             .catch((e) => {
+                setPhoneNumber('')
+                setPassword('')
                 console.log('error login', e)
             })
     }
@@ -160,7 +165,7 @@ const FirebaseLogin = () => {
                     </AnimateButton>
                 </Box>
 
-                {error || loginError && (
+                {error && (
                     <Grid
                         data-cy='login-error-container'
                         container
@@ -174,10 +179,30 @@ const FirebaseLogin = () => {
                             textAlign='center'
                             color='palevioletred'
                         >
-                            Error Happened!
+                            {error.message}
                         </Typography>
                     </Grid>
                 )}
+
+                {loginError && (
+                    <Grid
+                        data-cy='login-error-container'
+                        container
+                        direction='row'
+                        alignItems='center'
+                        justifyContent='center'
+                    >
+                        <Typography
+                            variant='caption'
+                            fontSize='16px'
+                            textAlign='center'
+                            color='palevioletred'
+                        >
+                            You are not authorized to access this application
+                        </Typography>
+                    </Grid>
+                )}
+
             </form>
         </>
     )
