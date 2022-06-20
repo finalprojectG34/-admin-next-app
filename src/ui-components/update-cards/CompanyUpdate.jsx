@@ -4,7 +4,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
+  DialogTitle, FormControl, InputLabel, MenuItem, Select,
 } from '@mui/material'
 import { useState } from 'react'
 import { UPDATE_COMPANY } from '../../apollo/mutations/shop_mutations'
@@ -20,6 +20,8 @@ const CompanyUpdate = ({ handleClose, open, data, refetch }) => {
   const [addressName, setAddressName] = useState(
     data?.address?.addressName || ''
   )
+  const [role, setRole] = useState(data?.role || '')
+
 
   const [updateCompany] = useMutation(UPDATE_COMPANY)
 
@@ -30,6 +32,7 @@ const CompanyUpdate = ({ handleClose, open, data, refetch }) => {
           name,
           description,
           tinNumber,
+          role,
           address: { subCity, city, addressName },
         },
         updateCompanyId: data.id,
@@ -39,6 +42,8 @@ const CompanyUpdate = ({ handleClose, open, data, refetch }) => {
       handleClose()
     })
   }
+  const ROLE = ['SHOP', 'DELIVERY']
+
   const closeModal = () => {
     handleClose()
   }
@@ -90,6 +95,21 @@ const CompanyUpdate = ({ handleClose, open, data, refetch }) => {
           name='addressName'
           onChange={(e) => setAddressName(e.target.value)}
         />
+
+        <FormControl variant='outlined' fullWidth sx={{ mt: 1 }}>
+          <InputLabel>Role</InputLabel>
+          <Select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              label='role'
+          >
+            {ROLE.map((role, index) => (
+                <MenuItem key={index} value={role}>
+                  {role}
+                </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </DialogContent>
       <DialogActions>
         <Button onClick={() => closeModal()}>Cancel</Button>

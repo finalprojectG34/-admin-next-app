@@ -145,6 +145,8 @@ const CompanyList = () => {
                                     <TableCell align='center'>Address</TableCell>
                                     <TableCell align='center'>Tin Number</TableCell>
                                     <TableCell align='center'>Status</TableCell>
+                                    <TableCell align='center'>Role</TableCell>
+
                                     <TableCell align='center'>Delete</TableCell>
                                     <TableCell align='right'>Edit</TableCell>
                                 </TableRow>
@@ -185,6 +187,7 @@ const CompanyList = () => {
                                             </TableCell>
                                             <TableCell align='left'>{company.tinNumber}</TableCell>
                                             <TableCell align='left'>{company.status}</TableCell>
+                                            <TableCell align='left'>{company.role}</TableCell>
 
                                             <TableCell align='right'>
                                                 <HighlightOffOutlined

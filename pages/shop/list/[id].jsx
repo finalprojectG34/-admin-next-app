@@ -75,7 +75,7 @@ const CompanyStatus = () => {
                     userId: data?.getOneCompany.ownerId,
                     status: updateStatus,
                     haveLicense: true,
-                    userRole: data?.getOneCompany.role === "SHOP" ? "SELLER" : "DELIVERY"
+                    role: data?.getOneCompany.role === "SHOP" ? "SELLER" : "DELIVERY"
                 },
             },
         }).then(() => {
