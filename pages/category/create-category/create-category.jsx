@@ -97,7 +97,6 @@ const CategoryCreate = () => {
                             size='large'
                             type='submit'
                             variant='contained'
-                            color='secondary'
                             loading={loading}
                             data-cy='category-create-button'
                         >

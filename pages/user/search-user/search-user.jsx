@@ -22,8 +22,10 @@ import Loader from '../../../src/ui-components/Loader'
 import {
     SEARCH_USER,
 } from '../../../src/apollo/queries/user_queries'
+import {useTheme} from "@mui/material/styles";
 
 const UserSearch = () => {
+    const theme = useTheme()
     const [searchByFirstName, {data, loading, error}] =
         useLazyQuery(SEARCH_USER)
     //   const [value, setValue] = useState('id')
@@ -101,7 +103,7 @@ const UserSearch = () => {
                     data?.searchUserByName.map((searchData) => (
                         <Card
                             key={searchData.id}
-                            sx={{maxWidth: 275, bgcolor: '#00000021', marginBottom: '15px'}}
+                            sx={{maxWidth: 275, bgcolor: theme.palette.primary.light, marginBottom: '15px'}}
                         >
                             <CardContent>
                                 <Typography sx={{fontSize: 18, mb: 1.5}} gutterBottom>

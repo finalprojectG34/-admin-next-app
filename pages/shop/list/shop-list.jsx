@@ -1,5 +1,6 @@
 import {useLazyQuery, useMutation} from '@apollo/client'
 import {useEffect, useState} from 'react'
+import { useTheme } from '@mui/material/styles'
 
 import {CachedOutlined, HighlightOffOutlined} from '@mui/icons-material'
 import {
@@ -31,6 +32,7 @@ import CompanyUpdate from '../../../src/ui-components/update-cards/CompanyUpdate
 import {useRouter} from 'next/router'
 
 const CompanyList = () => {
+    const theme = useTheme()
     const [currentUserId, setCurrentUserId] = useState('')
     const[getSingleCompany, {data: getOneCompany}] = useLazyQuery(GET_ONE_COMPANY, {
         fetchPolicy: 'no-cache'
@@ -134,7 +136,7 @@ const CompanyList = () => {
             {
                 <Typography variant='body2' component='div'>
                     <TableContainer component={Paper}>
-                        <Table sx={{minWidth: 650, bgcolor: '#00000021'}}>
+                        <Table sx={{minWidth: 650, bgcolor: theme.palette.primary.light}}>
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Number</TableCell>

@@ -26,8 +26,10 @@ import { DELETE_USER } from '../../../src/apollo/mutations/user_mutation'
 
 import { useState } from 'react'
 import UserUpdate from '../../../src/ui-components/update-cards/UserUpdate'
+import {useTheme} from "@mui/material/styles";
 
 const UserList = () => {
+  const theme = useTheme()
   const { data, error, loading, refetch } = useQuery(GET_ALL_USERS, {fetchPolicy: 'no-cache'})
 
   const [deleteUser] = useMutation(DELETE_USER)
@@ -78,7 +80,7 @@ const UserList = () => {
       )}
       <Typography variant='body2' component='div'>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650, bgcolor: '#00000021' }}>
+          <Table sx={{ minWidth: 650, bgcolor: theme.palette.primary.light }}>
             <TableHead>
               <TableRow>
                 <TableCell>Number</TableCell>

@@ -18,9 +18,10 @@ import {InputField} from '../../../src/ui-components/input/InputField'
 
 import {CREATE_USER} from '../../../src/apollo/mutations/user_mutation'
 import AnimateButton from '../../../src/ui-components/extended/AnimateButton'
+import {useTheme} from "@mui/material/styles";
 
 const UserCreate = () => {
-
+    const theme = useTheme()
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
@@ -147,7 +148,7 @@ const UserCreate = () => {
                             size='large'
                             type='submit'
                             variant='contained'
-                            color='secondary'
+                            // color={theme.palette.primary.light}
                             loading={loading}
                             data-cy='user-create-button'
                         >

@@ -229,7 +229,6 @@ const CompanyCreate = () => {
             id='role-select'
             value={role}
             label='Role'
-            required={true}
             onChange={(e) => setRole(e.target.value)}
           >
             {ROLE.map((role, index) => (
@@ -263,7 +262,6 @@ const CompanyCreate = () => {
               size='large'
               type='submit'
               variant='contained'
-              color='secondary'
               loading={loading}
               data-cy='company-create-button'
             >

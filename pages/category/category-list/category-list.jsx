@@ -22,8 +22,10 @@ import MainCard from '../../../src/ui-components/cards/MainCard'
 
 import { GET_ALL_CATEGORIES } from '../../../src/apollo/queries/category_queries'
 import { DELETE_CATEGORY } from '../../../src/apollo/mutations/category_mutation'
+import {useTheme} from "@mui/material/styles";
 
 const CategoryList = () => {
+  const theme = useTheme()
   const { data, error, loading, refetch } = useQuery(GET_ALL_CATEGORIES, {fetchPolicy: 'no-cache'})
   const [deleteCategory] = useMutation(DELETE_CATEGORY, {fetchPolicy: 'no-cache'})
   const [page, setPage] = useState(0)
@@ -53,7 +55,7 @@ const CategoryList = () => {
     >
       <Typography variant='body2' component='div'>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650, bgcolor: '#00000021' }}>
+          <Table sx={{ minWidth: 650, bgcolor: theme.palette.primary.light }}>
             <TableHead>
               <TableRow>
                 <TableCell>Number</TableCell>

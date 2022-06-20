@@ -190,7 +190,7 @@ export default function NavigationDrawer(props) {
         open={open}
         elevation={0}
         sx={{
-          bgcolor: theme.palette.secondary.main,
+          bgcolor: theme.palette.primary.main,
           transition: theme.transitions.create('width'),
         }}
       >
@@ -221,7 +221,7 @@ export default function NavigationDrawer(props) {
               component='div'
               margin='unset'
             >
-              Admin Panel.
+              Admin Panel
             </Typography>
             <Button
               variant='text'
@@ -258,6 +258,9 @@ export default function NavigationDrawer(props) {
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
+                    ":hover": {
+                      backgroundColor: theme.palette.primary.light
+                    }
                   }}
                 >
                   <ListItemIcon
@@ -298,6 +301,9 @@ export default function NavigationDrawer(props) {
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
+                    ":hover": {
+                      backgroundColor: theme.palette.primary.light
+                    }
                   }}
                 >
                   <ListItemIcon
@@ -338,6 +344,9 @@ export default function NavigationDrawer(props) {
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
+                    ":hover": {
+                      backgroundColor: theme.palette.primary.light
+                    }
                   }}
                 >
                   <ListItemIcon

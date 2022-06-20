@@ -17,10 +17,12 @@ import {
 import MainCard from '../../../src/ui-components/cards/MainCard';
 import Loader from "../../../src/ui-components/Loader";
 import {SEARCH_COMPANY_BY_NAME} from "../../../src/apollo/queries/company_queries";
+import {useTheme} from "@mui/material/styles";
 
 
 
 const CompanySearch = () => {
+    const theme = useTheme()
     const [getShop, {data, error, loading}] = useLazyQuery(SEARCH_COMPANY_BY_NAME);
     const [text, setText] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false)
@@ -94,7 +96,7 @@ const CompanySearch = () => {
                     </Box>
                 </Box>
                 {data && data?.searchCompanyByName.map(searchCompany => (
-                    <Card sx={{maxWidth: 275, bgcolor: '#00000021', mb: 1.5}} key={searchCompany.id}>
+                    <Card sx={{maxWidth: 275, bgcolor: theme.palette.primary.light, mb: 1.5}} key={searchCompany.id}>
                         <CardContent>
 
                             {searchCompany?.name && (

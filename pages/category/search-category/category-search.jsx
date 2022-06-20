@@ -20,8 +20,10 @@ import Loader from '../../../src/ui-components/Loader'
 import MainCard from '../../../src/ui-components/cards/MainCard'
 
 import { SEARCH_CATEGORY_BY_NAME} from '../../../src/apollo/queries/category_queries'
+import {useTheme} from "@mui/material/styles";
 
 const CategorySearch = () => {
+    const theme = useTheme()
     const [getCategory, {data, error, loading}] = useLazyQuery(SEARCH_CATEGORY_BY_NAME)
     const [text, setText] = useState('')
     const [isSubmitted, setIsSubmitted] = useState(false)
@@ -92,7 +94,7 @@ const CategorySearch = () => {
                         </Box>
                     </Box>
                     {data && data?.searchCategoryByName.map(searchCategory => (
-                        <Card sx={{maxWidth: 275, bgcolor: '#00000021', mb: 1.5}} key={searchCategory}>
+                        <Card sx={{maxWidth: 275, bgcolor: theme.palette.primary.light, mb: 1.5}} key={searchCategory}>
                             <CardContent>
                                 {searchCategory.name && (
                                     <Typography sx={{fontSize: 18}} gutterBottom>

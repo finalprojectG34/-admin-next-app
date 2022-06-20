@@ -43,7 +43,6 @@ const FirebaseLogin = () => {
     const [signIn, {loading, error}] = useMutation(SIGN_IN)
     const [loginError, setLoginError] = useState(false)
 
-    console.log(loginError)
     const handleSubmit = (e) => {
         e.preventDefault()
         signIn({
@@ -113,6 +112,7 @@ const FirebaseLogin = () => {
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     data-cy='login-phone-input'
+                    required={true}
                 />
                 <Box style={{margin: '30px'}}/>
                 <FormControl
@@ -128,6 +128,7 @@ const FirebaseLogin = () => {
                         value={password}
                         name='password'
                         data-cy='login-password-input'
+                        required={true}
                         onChange={(e) => setPassword(e.target.value)}
                         endAdornment={
                             <InputAdornment position='end'>
@@ -156,7 +157,6 @@ const FirebaseLogin = () => {
                             size='large'
                             type='submit'
                             variant='contained'
-                            color='secondary'
                             data-cy='login-phone-button'
                             loading={loading}
                         >

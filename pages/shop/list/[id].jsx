@@ -20,8 +20,9 @@ import {
 } from '@mui/material'
 import {Box} from '@mui/system'
 import {GET_ONE_COMPANY} from '../../../src/apollo/queries/company_queries'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {
+    GET_ONE_USER,
     SEARCH_USER,
 } from '../../../src/apollo/queries/user_queries'
 import Loader from '../../../src/ui-components/Loader'
@@ -29,9 +30,11 @@ import {
     UPDATE_COMPANY_OWNER,
     UPDATE_COMPANY_STATUS,
 } from '../../../src/apollo/mutations/shop_mutations'
+import {useTheme} from "@mui/material/styles";
 
 const CompanyStatus = () => {
     const router = useRouter()
+    const theme = useTheme()
     const {data, loading, refetch} = useQuery(GET_ONE_COMPANY, {
         variables: {getOneCompanyId: router.query.id},
     })
@@ -40,15 +43,21 @@ const CompanyStatus = () => {
         searchByFirstName,
         {data: searchData, error, loading: searchLoading},
     ] = useLazyQuery(SEARCH_USER)
+    const [searchOwner, {data: ownerData}] = useLazyQuery(GET_ONE_USER, {fetchPolicy: 'no-cache'})
 
     const [updateShopOwner] = useMutation(UPDATE_COMPANY_OWNER)
 
 
-    const [updateShopStatus] = useMutation(UPDATE_COMPANY_STATUS)
+    const [updateShopStatus] = useMutation(UPDATE_COMPANY_STATUS, {fetchPolicy: 'no-cache'})
 
     const [text, setText] = useState('')
     const [updateStatus, setUpdateStatus] = useState('')
     const [toggle, setToggle] = useState(false)
+    const [updateId, setUpdateId] = useState('')
+
+    useEffect(() => {
+        updateId && searchOwner(({variables: {getUserByIdId: updateId}})).then(() => refetch())
+    }, [updateId])
 
     if (loading || searchLoading) {
         return <Loader/>
@@ -66,7 +75,7 @@ const CompanyStatus = () => {
                     userId: data?.getOneCompany.ownerId,
                     status: updateStatus,
                     haveLicense: true,
-                    role: data?.getOneCompany.role === "SHOP" ? "SELLER" : "DELIVERY"
+                    userRole: data?.getOneCompany.role === "SHOP" ? "SELLER" : "DELIVERY"
                 },
             },
         }).then(() => {
@@ -82,6 +91,8 @@ const CompanyStatus = () => {
             },
         }).then(() => {
             refetch()
+            setUpdateId(updateOwnerId)
+
         })
     }
 
@@ -137,7 +148,7 @@ const CompanyStatus = () => {
                         columnSpacing={{xs: 1, sm: 2, md: 3}}
                     >
                         <Grid item xs={12} sm={6} pb={2}>
-                            <Card sx={{minWidth: 275, backgroundColor: '#00000021'}}>
+                            <Card sx={{minWidth: 275, backgroundColor: theme.palette.primary.light}}>
                                 <CardContent>
                                     {/* {data?.getOneCompany !== undefined &&
                   image?.imagePath !== 'null' && (
@@ -163,6 +174,10 @@ const CompanyStatus = () => {
                                     </Typography>
                                     <Typography sx={{fontSize: 18}} mb={1}>
                                         Tin Number: {tinNumber}
+                                    </Typography>
+
+                                    <Typography sx={{fontSize: 18}} mb={1}>
+                                        Owner: {ownerData?.getUserById.firstName}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
@@ -205,7 +220,7 @@ const CompanyStatus = () => {
                                         key={data.id}
                                         sx={{
                                             minWidth: 275,
-                                            bgcolor: '#00000021',
+                                            bgcolor: theme.palette.primary.light,
                                             marginBottom: '15px',
                                         }}
                                     >
