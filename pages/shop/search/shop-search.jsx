@@ -17,6 +17,8 @@ import {
 import MainCard from '../../../src/ui-components/cards/MainCard';
 import Loader from "../../../src/ui-components/Loader";
 import {SEARCH_COMPANY_BY_NAME} from "../../../src/apollo/queries/company_queries";
+import {withApollo} from '../../../src/hooks/useIsAuth'
+
 import {useTheme} from "@mui/material/styles";
 
 
@@ -137,4 +139,4 @@ const CompanySearch = () => {
     );
 };
 
-export default CompanySearch;
+export default withApollo({ssr: false}) (CompanySearch);

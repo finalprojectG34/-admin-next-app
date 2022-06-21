@@ -21,6 +21,8 @@ import AnimateButton from '../../../src/ui-components/extended/AnimateButton'
 
 import { CREATE_COMPANY } from '../../../src/apollo/mutations/shop_mutations'
 import fbConfig from '../../../src/firebase/fb-config'
+import {withApollo} from '../../../src/hooks/useIsAuth'
+
 
 const CompanyCreate = () => {
   const [name, setName] = useState('')
@@ -42,6 +44,7 @@ const CompanyCreate = () => {
 
 
   const [createCompany, { loading, error }] = useMutation(CREATE_COMPANY)
+
 
   const ROLE = ['SHOP', 'DELIVERY']
 
@@ -293,4 +296,4 @@ const CompanyCreate = () => {
   )
 }
 
-export default CompanyCreate
+export default withApollo({ssr: true}) (CompanyCreate)

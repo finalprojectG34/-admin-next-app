@@ -22,6 +22,8 @@ import AnimateButton from '../../../ui-components/extended/AnimateButton'
 
 import {SIGN_IN} from '../../../apollo/mutations/user_mutation'
 import {LoadingButton} from '@mui/lab'
+import {withApollo} from '../../../hooks/useIsAuth'
+
 
 const FirebaseLogin = () => {
     const router = useRouter()
@@ -208,4 +210,4 @@ const FirebaseLogin = () => {
     )
 }
 
-export default FirebaseLogin
+export default withApollo({ssr: true}) (FirebaseLogin)

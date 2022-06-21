@@ -27,6 +27,7 @@ import { DELETE_USER } from '../../../src/apollo/mutations/user_mutation'
 import { useState } from 'react'
 import UserUpdate from '../../../src/ui-components/update-cards/UserUpdate'
 import {useTheme} from "@mui/material/styles";
+import {withApollo} from '../../../src/hooks/useIsAuth'
 
 const UserList = () => {
   const theme = useTheme()
@@ -162,4 +163,4 @@ const UserList = () => {
   )
 }
 
-export default UserList
+export default withApollo({ssr: false}) (UserList)

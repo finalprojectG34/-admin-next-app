@@ -4,6 +4,8 @@ import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material'
 import AuthWrapper from '../../src/ui-components/wrapper/AuthWrapper'
 import AuthCardWrapper from '../../src/ui-components/wrapper/AuthCardWrapper'
 import AuthLogin from '../../src/ui-components/authentication/auth-forms/AuthLogin'
+import {withApollo} from '../../src/hooks/useIsAuth'
+
 
 const LoginPage = () => {
   const theme = useTheme()
@@ -96,4 +98,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default withApollo({ssr: true}) (LoginPage)

@@ -31,6 +31,8 @@ import {
     UPDATE_COMPANY_STATUS,
 } from '../../../src/apollo/mutations/shop_mutations'
 import {useTheme} from "@mui/material/styles";
+import {withApollo} from '../../../src/hooks/useIsAuth'
+
 
 const CompanyStatus = () => {
     const router = useRouter()
@@ -41,7 +43,7 @@ const CompanyStatus = () => {
 
     const [
         searchByFirstName,
-        {data: searchData, error, loading: searchLoading},
+        {data: searchData, error},
     ] = useLazyQuery(SEARCH_USER)
     const [searchOwner, {data: ownerData}] = useLazyQuery(GET_ONE_USER, {fetchPolicy: 'no-cache'})
 
@@ -59,7 +61,7 @@ const CompanyStatus = () => {
         updateId && searchOwner(({variables: {getUserByIdId: updateId}})).then(() => refetch())
     }, [updateId])
 
-    if (loading || searchLoading) {
+    if (loading) {
         return <Loader/>
     }
 
@@ -75,7 +77,8 @@ const CompanyStatus = () => {
                     userId: data?.getOneCompany.ownerId,
                     status: updateStatus,
                     haveLicense: true,
-                    role: data?.getOneCompany.role === "SHOP" ? "SELLER" : "DELIVERY"
+                    role: data?.getOneCompany.role,
+                    userRole: data?.getOneCompany.role === "SHOP" ? "SELLER" : "DELIVERY",
                 },
             },
         }).then(() => {
@@ -150,13 +153,7 @@ const CompanyStatus = () => {
                         <Grid item xs={12} sm={6} pb={2}>
                             <Card sx={{minWidth: 275, backgroundColor: theme.palette.primary.light}}>
                                 <CardContent>
-                                    {/* {data?.getOneCompany !== undefined &&
-                  image?.imagePath !== 'null' && (
-                    <Image
-                      src={`${image.imagePath}`}
-                      layout='fill'
-                    />
-                  )} */}
+
                                     <Stack direction={'row'} alignItems='baseline' mb={3}>
                                         <Typography sx={{fontSize: 22}} mr={6}>
                                             {name}
@@ -263,4 +260,4 @@ const CompanyStatus = () => {
     )
 }
 
-export default CompanyStatus
+export default withApollo({ssr: true})(CompanyStatus)

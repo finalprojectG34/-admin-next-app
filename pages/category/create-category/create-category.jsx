@@ -10,6 +10,8 @@ import MainCard from '../../../src/ui-components/cards/MainCard'
 import {CREATE_CATEGORY} from '../../../src/apollo/mutations/category_mutation'
 import AnimateButton from '../../../src/ui-components/extended/AnimateButton'
 import Loader from "../../../src/ui-components/Loader";
+import {withApollo} from '../../../src/hooks/useIsAuth'
+
 
 const CategoryCreate = () => {
     const [name, setName] = useState('')
@@ -128,4 +130,4 @@ const CategoryCreate = () => {
     )
 }
 
-export default CategoryCreate
+export default withApollo({ssr: true}) (CategoryCreate)

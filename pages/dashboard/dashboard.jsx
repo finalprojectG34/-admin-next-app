@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 
 import { Grid, Card, CardContent, Typography } from '@mui/material'
 import { useQuery } from '@apollo/client'
@@ -6,6 +5,8 @@ import { GET_ALL_USERS } from '../../src/apollo/queries/user_queries'
 import Loader from '../../src/ui-components/Loader'
 import { GET_ALL_CATEGORIES } from '../../src/apollo/queries/category_queries'
 import { GET_ALL_COMPANY } from '../../src/apollo/queries/company_queries'
+import {withApollo} from '../../src/hooks/useIsAuth'
+
 
 const Dashboard = () => {
   const { data, loading } = useQuery(GET_ALL_USERS)
@@ -80,4 +81,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default withApollo({ssr: false}) (Dashboard)

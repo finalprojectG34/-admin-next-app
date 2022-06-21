@@ -30,6 +30,8 @@ import {
 } from '../../../src/apollo/queries/company_queries'
 import CompanyUpdate from '../../../src/ui-components/update-cards/CompanyUpdate'
 import {useRouter} from 'next/router'
+import {withApollo} from '../../../src/hooks/useIsAuth'
+
 
 const CompanyList = () => {
     const theme = useTheme()
@@ -241,4 +243,4 @@ const CompanyList = () => {
     )
 }
 
-export default CompanyList
+export default withApollo({ssr: true}) (CompanyList)

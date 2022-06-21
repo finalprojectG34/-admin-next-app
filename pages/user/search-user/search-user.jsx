@@ -17,18 +17,18 @@ import {
 } from '@mui/material'
 
 import MainCard from '../../../src/ui-components/cards/MainCard'
-import Loader from '../../../src/ui-components/Loader'
 
 import {
     SEARCH_USER,
 } from '../../../src/apollo/queries/user_queries'
 import {useTheme} from "@mui/material/styles";
+import {withApollo} from '../../../src/hooks/useIsAuth'
+
 
 const UserSearch = () => {
     const theme = useTheme()
-    const [searchByFirstName, {data, loading, error}] =
+    const [searchByFirstName, {data, error}] =
         useLazyQuery(SEARCH_USER)
-    //   const [value, setValue] = useState('id')
     const [text, setText] = useState('')
     const [isSubmitted, setIsSubmitted] = useState(false)
 
@@ -38,7 +38,6 @@ const UserSearch = () => {
             clearTimeout(timer)
         }
     }, [isSubmitted])
-    if (loading) return <Loader/>
     return (
         <MainCard title='Search User'>
             {
@@ -47,7 +46,8 @@ const UserSearch = () => {
                 </Alert>
             }
             {
-                !data?.searchUserByName.length && isSubmitted && <Alert variant='outlined' severity='error' sx={{mb: 2}}>
+                !data?.searchUserByName.length && isSubmitted &&
+                <Alert variant='outlined' severity='error' sx={{mb: 2}}>
                     No User Found!
                 </Alert>
             }
@@ -132,4 +132,4 @@ const UserSearch = () => {
     )
 }
 
-export default UserSearch
+export default withApollo({ssr: true})(UserSearch)

@@ -23,6 +23,8 @@ import MainCard from '../../../src/ui-components/cards/MainCard'
 import { GET_ALL_CATEGORIES } from '../../../src/apollo/queries/category_queries'
 import { DELETE_CATEGORY } from '../../../src/apollo/mutations/category_mutation'
 import {useTheme} from "@mui/material/styles";
+import {withApollo} from '../../../src/hooks/useIsAuth'
+
 
 const CategoryList = () => {
   const theme = useTheme()
@@ -121,4 +123,4 @@ const CategoryList = () => {
   )
 }
 
-export default CategoryList
+export default withApollo({ssr: true}) (CategoryList)

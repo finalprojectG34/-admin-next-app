@@ -18,10 +18,10 @@ import {InputField} from '../../../src/ui-components/input/InputField'
 
 import {CREATE_USER} from '../../../src/apollo/mutations/user_mutation'
 import AnimateButton from '../../../src/ui-components/extended/AnimateButton'
-import {useTheme} from "@mui/material/styles";
+import {withApollo} from '../../../src/hooks/useIsAuth'
+
 
 const UserCreate = () => {
-    const theme = useTheme()
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
@@ -81,7 +81,7 @@ const UserCreate = () => {
                     severity={'success'}
 
                 >
-                   User Created Successfully.
+                    User Created Successfully.
                 </Alert>
             }
             <form onSubmit={handleSubmit}>
@@ -180,4 +180,4 @@ const UserCreate = () => {
     )
 }
 
-export default UserCreate
+export default withApollo({ssr: true})(UserCreate)

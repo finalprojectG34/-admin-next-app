@@ -21,6 +21,8 @@ import MainCard from '../../../src/ui-components/cards/MainCard'
 
 import { SEARCH_CATEGORY_BY_NAME} from '../../../src/apollo/queries/category_queries'
 import {useTheme} from "@mui/material/styles";
+import {withApollo} from '../../../src/hooks/useIsAuth'
+
 
 const CategorySearch = () => {
     const theme = useTheme()
@@ -123,4 +125,4 @@ const CategorySearch = () => {
     )
 }
 
-export default CategorySearch
+export default withApollo({ssr: false}) (CategorySearch)
