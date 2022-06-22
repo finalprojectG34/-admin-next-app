@@ -125,4 +125,4 @@ const CategorySearch = () => {
     )
 }
 
-export default withApollo({ssr: false}) (CategorySearch)
+export default withApollo({ssr: true}) (CategorySearch)

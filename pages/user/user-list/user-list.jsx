@@ -40,8 +40,9 @@ const UserList = () => {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
-  const { data: getOneUserData } = useQuery(GET_ONE_USER, {
+  const { data: getOneUserData, loading: oneUserLoading } = useQuery(GET_ONE_USER, {
     variables: { getUserByIdId: currentUserId },
+    fetchPolicy: 'no-cache'
   })
 
   const setUserUpdate = (id) => {
@@ -71,7 +72,7 @@ const UserList = () => {
       sx={{ margin: 'auto' }}
       style={{ maxWidth: 'max-content' }}
     >
-      {open && getOneUserData?.getUserById && (
+      {open && getOneUserData?.getUserById && !oneUserLoading && (
         <UserUpdate
           handleClose={setOpen}
           open={open}
@@ -163,4 +164,4 @@ const UserList = () => {
   )
 }
 
-export default withApollo({ssr: false}) (UserList)
+export default withApollo({ssr: true}) (UserList)

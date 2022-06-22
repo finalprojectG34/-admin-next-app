@@ -169,13 +169,13 @@ const CompanyStatus = () => {
                                     <Typography sx={{fontSize: 18}} mb={1}>
                                         Status: {status}
                                     </Typography>
-                                    <Typography sx={{fontSize: 18}} mb={1}>
-                                        Tin Number: {tinNumber}
-                                    </Typography>
+                                    {/*<Typography sx={{fontSize: 18}} mb={1}>*/}
+                                    {/*    Tin Number: {tinNumber}*/}
+                                    {/*</Typography>*/}
 
-                                    <Typography sx={{fontSize: 18}} mb={1}>
-                                        Owner: {ownerData?.getUserById.firstName}
-                                    </Typography>
+                                    {/*<Typography sx={{fontSize: 18}} mb={1}>*/}
+                                    {/*    Owner: {ownerData?.getUserById.firstName}*/}
+                                    {/*</Typography>*/}
                                 </CardContent>
                                 <CardActions>
                                     {data?.getOneCompany.ownerId && (

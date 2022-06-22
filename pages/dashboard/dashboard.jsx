@@ -81,4 +81,4 @@ const Dashboard = () => {
   )
 }
 
-export default withApollo({ssr: false}) (Dashboard)
+export default withApollo({ssr: true}) (Dashboard)

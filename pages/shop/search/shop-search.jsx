@@ -38,7 +38,6 @@ const CompanySearch = () => {
 
     if (loading) return <Loader/>;
 
-    console.log(data)
     return (
         <MainCard title='Shop Search'>
             {
@@ -139,4 +138,4 @@ const CompanySearch = () => {
     );
 };
 
-export default withApollo({ssr: false}) (CompanySearch);
+export default withApollo({ssr: true}) (CompanySearch);
